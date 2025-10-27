@@ -76,41 +76,41 @@ class AvatarService {
   Future<void> updateAvatarPart({
     required String userId,
     required String category,
-    required String emoji,
+    required String partId,
   }) async {
     try {
       final updateData = <String, dynamic>{};
 
       switch (category) {
         case 'face':
-          updateData['face'] = emoji;
+          updateData['face'] = partId;
           break;
         case 'eyes':
-          updateData['eyes'] = emoji;
+          updateData['eyes'] = partId;
           break;
         case 'mouth':
-          updateData['mouth'] = emoji;
+          updateData['mouth'] = partId;
           break;
         case 'hair':
-          updateData['hair'] = emoji;
+          updateData['hair'] = partId;
           break;
         case 'top':
-          updateData['top'] = emoji;
+          updateData['top'] = partId;
           break;
         case 'bottom':
-          updateData['bottom'] = emoji;
+          updateData['bottom'] = partId;
           break;
         case 'shoes':
-          updateData['shoes'] = emoji;
+          updateData['shoes'] = partId;
           break;
         case 'hands':
-          updateData['hands'] = emoji;
+          updateData['hands'] = partId;
           break;
         case 'accessory':
-          updateData['accessory'] = emoji;
+          updateData['accessory'] = partId;
           break;
         case 'background':
-          updateData['background'] = emoji;
+          updateData['background'] = partId;
           break;
       }
 
@@ -148,7 +148,7 @@ class AvatarService {
       final avatar = AvatarModel.fromMap(avatarDoc.data()!);
 
       final unlockedList = _getUnlockedList(avatar, part.category);
-      if (unlockedList.contains(part.emoji)) {
+      if (unlockedList.contains(part.id)) {
         throw Exception('Ya tienes esta parte desbloqueada');
       }
 
@@ -165,7 +165,7 @@ class AvatarService {
         transaction.update(
           _firestore.collection('avatars').doc(userId),
           {
-            fieldName: FieldValue.arrayUnion([part.emoji]),
+            fieldName: FieldValue.arrayUnion([part.id]),
           },
         );
 
@@ -173,7 +173,7 @@ class AvatarService {
         if (unlockedList.length == 1) {
           transaction.update(
             _firestore.collection('avatars').doc(userId),
-            {part.category: part.emoji},
+            {part.category: part.id},
           );
         }
       });
@@ -189,6 +189,10 @@ class AvatarService {
     switch (category) {
       case 'face':
         return avatar.unlockedFaces;
+      case 'eyes':
+        return avatar.unlockedEyes;
+      case 'mouth':
+        return avatar.unlockedMouths;
       case 'hair':
         return avatar.unlockedHairs;
       case 'top':
@@ -228,7 +232,7 @@ class AvatarService {
   /// Verifica si una parte está desbloqueada
   Future<bool> isPartUnlocked({
     required String userId,
-    required String emoji,
+    required String partId,
     required String category,
   }) async {
     try {
@@ -236,7 +240,7 @@ class AvatarService {
       if (avatar == null) return false;
 
       final unlockedList = _getUnlockedList(avatar, category);
-      return unlockedList.contains(emoji);
+      return unlockedList.contains(partId);
     } catch (e) {
       return false;
     }
@@ -268,12 +272,10 @@ class AvatarService {
       final avatar = await getAvatar(userId);
       if (avatar == null) return [];
 
-      final unlockedEmojis = _getUnlockedList(avatar, category);
+      final unlockedIds = _getUnlockedList(avatar, category);
       final allParts = AvatarCatalog.getPartsByCategory(category);
 
-      return allParts
-          .where((part) => unlockedEmojis.contains(part.emoji))
-          .toList();
+      return allParts.where((part) => unlockedIds.contains(part.id)).toList();
     } catch (e) {
       return [];
     }
@@ -288,11 +290,11 @@ class AvatarService {
       final avatar = await getAvatar(userId);
       if (avatar == null) return [];
 
-      final unlockedEmojis = _getUnlockedList(avatar, category);
+      final unlockedIds = _getUnlockedList(avatar, category);
       final allParts = AvatarCatalog.getPartsByCategory(category);
 
       return allParts
-          .where((part) => !unlockedEmojis.contains(part.emoji) && !part.isDefault)
+          .where((part) => !unlockedIds.contains(part.id) && !part.isDefault)
           .toList();
     } catch (e) {
       return [];
