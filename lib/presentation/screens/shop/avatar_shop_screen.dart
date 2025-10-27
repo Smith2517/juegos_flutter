@@ -10,6 +10,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,6 +18,7 @@ import '../../../app/theme/colors.dart';
 import '../../../domain/models/avatar_model.dart';
 import '../../../domain/services/avatar_service.dart';
 import '../../../app/config/avatar_catalog.dart';
+import '../../../domain/models/avatar_part_item.dart';
 
 class AvatarShopScreen extends StatefulWidget {
   const AvatarShopScreen({super.key});
@@ -216,7 +218,7 @@ class _AvatarShopScreenState extends State<AvatarShopScreen> {
 
         final avatar = avatarSnapshot.data!;
         final allParts = AvatarCatalog.getPartsByCategory(_selectedCategory);
-        final unlockedEmojis = _getUnlockedList(avatar, _selectedCategory);
+        final unlockedIds = _getUnlockedList(avatar, _selectedCategory);
 
         return StreamBuilder<DocumentSnapshot>(
           stream: FirebaseFirestore.instance
@@ -238,7 +240,7 @@ class _AvatarShopScreenState extends State<AvatarShopScreen> {
                 itemCount: allParts.length,
                 itemBuilder: (context, index) {
                   final part = allParts[index];
-                  final isUnlocked = unlockedEmojis.contains(part.emoji);
+                  final isUnlocked = unlockedIds.contains(part.id);
                   final canAfford = userCoins >= part.price;
 
                   return Padding(
@@ -300,10 +302,7 @@ class _AvatarShopScreenState extends State<AvatarShopScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Emoji
-            Text(
-              part.emoji == 'none' ? '❌' : part.emoji,
-              style: const TextStyle(fontSize: 32),
-            ),
+            _PartThumbnail(part: part, size: 48),
             const SizedBox(height: 4),
 
             // Nombre
@@ -391,10 +390,7 @@ class _AvatarShopScreenState extends State<AvatarShopScreen> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              part.emoji == 'none' ? '❌' : part.emoji,
-              style: const TextStyle(fontSize: 80),
-            ),
+            _PartThumbnail(part: part, size: 96),
             const SizedBox(height: 16),
             Text(
               part.description,
@@ -511,6 +507,10 @@ class _AvatarShopScreenState extends State<AvatarShopScreen> {
     switch (category) {
       case 'face':
         return avatar.unlockedFaces;
+      case 'eyes':
+        return avatar.unlockedEyes;
+      case 'mouth':
+        return avatar.unlockedMouths;
       case 'hair':
         return avatar.unlockedHairs;
       case 'top':
@@ -519,6 +519,8 @@ class _AvatarShopScreenState extends State<AvatarShopScreen> {
         return avatar.unlockedBottoms;
       case 'shoes':
         return avatar.unlockedShoes;
+      case 'hands':
+        return avatar.unlockedHands;
       case 'accessory':
         return avatar.unlockedAccessories;
       case 'background':
@@ -526,5 +528,29 @@ class _AvatarShopScreenState extends State<AvatarShopScreen> {
       default:
         return [];
     }
+  }
+}
+
+class _PartThumbnail extends StatelessWidget {
+  final AvatarPartItem part;
+  final double size;
+
+  const _PartThumbnail({required this.part, this.size = 56});
+
+  @override
+  Widget build(BuildContext context) {
+    if (part.assetPath.isEmpty) {
+      return Text(
+        part.emoji == null || part.emoji!.isEmpty ? '🎨' : part.emoji!,
+        style: TextStyle(fontSize: size * 0.6),
+      );
+    }
+
+    return SvgPicture.asset(
+      part.assetPath,
+      width: size,
+      height: size,
+      fit: BoxFit.contain,
+    );
   }
 }

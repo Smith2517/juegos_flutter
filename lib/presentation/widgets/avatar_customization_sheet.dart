@@ -1,5 +1,3 @@
-library;
-
 /// Sheet de Personalización de Avatar
 ///
 /// Permite al usuario cambiar las partes de su avatar
@@ -8,9 +6,13 @@ library;
 /// Autor: Sistema Educativo
 /// Fecha: 2025
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../domain/models/avatar_model.dart';
+import '../../domain/models/avatar_part_item.dart';
 import '../../domain/services/avatar_service.dart';
 import '../../app/config/avatar_catalog.dart';
 import '../../app/theme/colors.dart';
@@ -35,21 +37,29 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
   String _selectedCategory = 'face';
   final AvatarService _avatarService = AvatarService();
   bool _isUpdating = false;
+  late final ScrollController _categoryController;
 
   @override
   void initState() {
     super.initState();
     _currentAvatar = widget.avatar;
+    _categoryController = ScrollController();
   }
 
-  Future<void> _updateAvatarPart(String category, String emoji) async {
+  @override
+  void dispose() {
+    _categoryController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _updateAvatarPart(String category, String partId) async {
     setState(() => _isUpdating = true);
 
     try {
       await _avatarService.updateAvatarPart(
         userId: widget.userId,
         category: category,
-        emoji: emoji,
+        partId: partId,
       );
 
       if (mounted) {
@@ -87,6 +97,10 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
     switch (category) {
       case 'face':
         return _currentAvatar.unlockedFaces;
+      case 'eyes':
+        return _currentAvatar.unlockedEyes;
+      case 'mouth':
+        return _currentAvatar.unlockedMouths;
       case 'hair':
         return _currentAvatar.unlockedHairs;
       case 'top':
@@ -95,6 +109,8 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
         return _currentAvatar.unlockedBottoms;
       case 'shoes':
         return _currentAvatar.unlockedShoes;
+      case 'hands':
+        return _currentAvatar.unlockedHands;
       case 'accessory':
         return _currentAvatar.unlockedAccessories;
       case 'background':
@@ -108,6 +124,10 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
     switch (category) {
       case 'face':
         return _currentAvatar.face;
+      case 'eyes':
+        return _currentAvatar.eyes;
+      case 'mouth':
+        return _currentAvatar.mouth;
       case 'hair':
         return _currentAvatar.hair;
       case 'top':
@@ -116,6 +136,8 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
         return _currentAvatar.bottom;
       case 'shoes':
         return _currentAvatar.shoes;
+      case 'hands':
+        return _currentAvatar.hands;
       case 'accessory':
         return _currentAvatar.accessory;
       case 'background':
@@ -198,52 +220,83 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
           // Selector de categoría
           SizedBox(
             height: 80,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: AvatarCatalog.categories.length,
-              itemBuilder: (context, index) {
-                final category = AvatarCatalog.categories[index];
-                final isSelected = _selectedCategory == category;
+            child: ScrollConfiguration(
+              behavior: ScrollConfiguration.of(context).copyWith(
+                dragDevices: const {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                  PointerDeviceKind.trackpad,
+                  PointerDeviceKind.stylus,
+                },
+              ),
+              child: Scrollbar(
+                controller: _categoryController,
+                thumbVisibility: true,
+                interactive: true,
+                child: ListView.builder(
+                  controller: _categoryController,
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: AvatarCatalog.categories.length,
+                  itemBuilder: (context, index) {
+                    final category = AvatarCatalog.categories[index];
+                    final isSelected = _selectedCategory == category;
 
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedCategory = category;
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 12),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: isSelected ? AppColors.primary : Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: isSelected ? AppColors.primary : Colors.grey.shade300,
-                        width: 2,
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          AvatarCatalog.getCategoryIcon(category),
-                          style: const TextStyle(fontSize: 24),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          AvatarCatalog.getCategoryName(category),
-                          style: GoogleFonts.fredoka(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: isSelected ? Colors.white : AppColors.textPrimary,
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Material(
+                        color:
+                            isSelected ? AppColors.primary : Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(16),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () {
+                            setState(() {
+                              _selectedCategory = category;
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : Colors.grey.shade300,
+                                width: 2,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  AvatarCatalog.getCategoryIcon(category),
+                                  style: const TextStyle(fontSize: 24),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  AvatarCatalog.getCategoryName(category),
+                                  style: GoogleFonts.fredoka(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : AppColors.textPrimary,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
           ),
 
@@ -261,14 +314,13 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
   }
 
   Widget _buildPartsList() {
-    final unlockedEmojis = _getUnlockedList(_selectedCategory);
+    final unlockedIds = _getUnlockedList(_selectedCategory);
     final currentPart = _getCurrentPart(_selectedCategory);
     final allParts = AvatarCatalog.getPartsByCategory(_selectedCategory);
 
     // Filtrar solo las partes desbloqueadas
-    final availableParts = allParts
-        .where((part) => unlockedEmojis.contains(part.emoji))
-        .toList();
+    final availableParts =
+        allParts.where((part) => unlockedIds.contains(part.id)).toList();
 
     if (availableParts.isEmpty) {
       return Center(
@@ -312,11 +364,11 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
       itemCount: availableParts.length,
       itemBuilder: (context, index) {
         final part = availableParts[index];
-        final isSelected = currentPart == part.emoji;
+        final isSelected = currentPart == part.id;
 
         return GestureDetector(
           onTap: () {
-            _updateAvatarPart(_selectedCategory, part.emoji);
+            _updateAvatarPart(_selectedCategory, part.id);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -330,10 +382,7 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  part.emoji == 'none' ? '❌' : part.emoji,
-                  style: const TextStyle(fontSize: 40),
-                ),
+                _PartPreview(part: part),
                 const SizedBox(height: 4),
                 Text(
                   part.name,
@@ -368,6 +417,35 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
           ),
         );
       },
+    );
+  }
+}
+
+class _PartPreview extends StatelessWidget {
+  final AvatarPartItem part;
+
+  const _PartPreview({required this.part});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final fallback = Text(
+      part.emoji == null || part.emoji!.isEmpty ? '🎨' : part.emoji!,
+      style: theme.textTheme.displaySmall?.copyWith(fontSize: 40),
+    );
+
+    if (part.assetPath.isEmpty) {
+      return fallback;
+    }
+
+    return Center(
+      child: SvgPicture.asset(
+        part.assetPath,
+        width: 56,
+        height: 56,
+        fit: BoxFit.contain,
+        placeholderBuilder: (_) => fallback,
+      ),
     );
   }
 }
