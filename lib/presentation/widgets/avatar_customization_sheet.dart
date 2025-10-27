@@ -219,6 +219,77 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
     );
   }
 
+  void _scrollCategories(double delta) {
+    if (!_categoryController.hasClients) {
+      return;
+    }
+
+    final ScrollPosition position = _categoryController.position;
+    final double target = (_categoryController.offset + delta)
+        .clamp(0.0, position.maxScrollExtent);
+
+    if (target == _categoryController.offset) {
+      return;
+    }
+
+    _categoryController.animateTo(
+      target,
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _handleCategoryPointerSignal(PointerSignalEvent event) {
+    if (event is! PointerScrollEvent) {
+      return;
+    }
+
+    if (!_categoryController.hasClients) {
+      return;
+    }
+
+    final ScrollPosition position = _categoryController.position;
+    final double rawDelta = event.scrollDelta.dy.abs() > event.scrollDelta.dx.abs()
+        ? event.scrollDelta.dy
+        : event.scrollDelta.dx;
+    if (rawDelta == 0) {
+      return;
+    }
+
+    final double target = (_categoryController.offset + rawDelta)
+        .clamp(0.0, position.maxScrollExtent);
+
+    if (target != _categoryController.offset) {
+      _categoryController.jumpTo(target);
+    }
+  }
+
+  Widget _buildCategoryScrollButton({
+    required IconData icon,
+    required double delta,
+  }) {
+    return SizedBox(
+      width: 36,
+      child: AnimatedBuilder(
+        animation: _categoryController,
+        builder: (context, _) {
+          final bool canScroll = _categoryController.hasClients &&
+              ((delta < 0 && _categoryController.offset > 0) ||
+                  (delta > 0 &&
+                      _categoryController.offset <
+                          _categoryController.position.maxScrollExtent));
+
+          return IconButton(
+            icon: Icon(icon, size: 24),
+            color: canScroll ? AppColors.primary : Colors.grey.shade400,
+            tooltip: delta < 0 ? 'Ver anteriores' : 'Ver siguientes',
+            onPressed: canScroll ? () => _scrollCategories(delta) : null,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
