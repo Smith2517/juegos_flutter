@@ -54,7 +54,7 @@ class _AvatarShopScreenState extends State<AvatarShopScreen> {
             end: Alignment.bottomRight,
             colors: [
               AppColors.primary,
-              AppColors.primary.withValues(alpha: 0.7),
+              AppColors.primary.withOpacity(0.7),
             ],
           ),
         ),
@@ -292,7 +292,7 @@ class _AvatarShopScreenState extends State<AvatarShopScreen> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: Colors.black.withOpacity(0.05),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),

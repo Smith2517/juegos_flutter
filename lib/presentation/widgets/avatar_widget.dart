@@ -218,18 +218,26 @@ class _AvatarWidgetState extends State<AvatarWidget>
     final bottom = AvatarCatalog.getPartById(widget.avatar.bottom);
     final shoes = AvatarCatalog.getPartById(widget.avatar.shoes);
 
-    final scale = _scaleFactor;
-    final canvasHeight = _canvasHeight * scale;
+    final double scale = _scaleFactor;
+    final double canvasHeight = _canvasHeight * scale;
+    final Color baseBackgroundColor = _resolveBackgroundColor(background);
 
     final children = <Widget>[
       Positioned.fill(
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: _resolveBackgroundColor(background),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                baseBackgroundColor,
+                baseBackgroundColor.withOpacity(0.85),
+              ],
+            ),
             borderRadius: BorderRadius.circular(24 * scale),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
+                color: Colors.black.withOpacity(0.08),
                 blurRadius: 18 * scale,
                 offset: Offset(0, 10 * scale),
               ),
@@ -259,11 +267,11 @@ class _AvatarWidgetState extends State<AvatarWidget>
         return;
       }
 
-      final double layerWidth = layout.width * scale;
-      final double layerHeight = layout.height * scale;
+      final double layerWidth = layout.widthFactor * widget.size;
+      final double layerHeight = layout.heightFactor * canvasHeight;
       final double left =
-          (widget.size - layerWidth) / 2 + layout.dx * scale;
-      final double top = layout.top * scale;
+          (widget.size - layerWidth) / 2 + layout.dxFactor * widget.size;
+      final double top = layout.topFactor * canvasHeight;
 
       children.add(
         Positioned(
@@ -333,6 +341,33 @@ class _AvatarWidgetState extends State<AvatarWidget>
 }
 
 class _LayerLayout {
+  final double widthFactor;
+  final double heightFactor;
+  final double topFactor;
+  final double dxFactor;
+
+  const _LayerLayout({
+    required this.widthFactor,
+    required this.heightFactor,
+    required this.topFactor,
+    this.dxFactor = 0,
+  });
+}
+
+const Map<String, _LayerLayout> _layerLayouts = {
+  'face': _LayerLayout(widthFactor: 0.68, heightFactor: 0.44, topFactor: 0.2),
+  'eyes': _LayerLayout(widthFactor: 0.46, heightFactor: 0.12, topFactor: 0.34),
+  'mouth': _LayerLayout(widthFactor: 0.38, heightFactor: 0.12, topFactor: 0.48),
+  'hair': _LayerLayout(widthFactor: 0.84, heightFactor: 0.38, topFactor: 0.02),
+  'accessory':
+      _LayerLayout(widthFactor: 0.7, heightFactor: 0.2, topFactor: 0.31),
+  'top': _LayerLayout(widthFactor: 0.78, heightFactor: 0.42, topFactor: 0.52),
+  'hands': _LayerLayout(widthFactor: 0.92, heightFactor: 0.28, topFactor: 0.66),
+  'bottom': _LayerLayout(widthFactor: 0.74, heightFactor: 0.34, topFactor: 0.74),
+  'shoes': _LayerLayout(widthFactor: 0.72, heightFactor: 0.18, topFactor: 0.88),
+};
+
+class _LayerLayout {
   final double width;
   final double height;
   final double top;
@@ -386,7 +421,7 @@ class SimpleAvatarWidget extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: Colors.black.withOpacity(0.08),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),

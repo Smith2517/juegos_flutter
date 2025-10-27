@@ -147,6 +147,77 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
     }
   }
 
+  void _scrollCategories(double delta) {
+    if (!_categoryController.hasClients) {
+      return;
+    }
+
+    final ScrollPosition position = _categoryController.position;
+    final double target = (_categoryController.offset + delta)
+        .clamp(0.0, position.maxScrollExtent);
+
+    if (target == _categoryController.offset) {
+      return;
+    }
+
+    _categoryController.animateTo(
+      target,
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _handleCategoryPointerSignal(PointerSignalEvent event) {
+    if (event is! PointerScrollEvent) {
+      return;
+    }
+
+    if (!_categoryController.hasClients) {
+      return;
+    }
+
+    final ScrollPosition position = _categoryController.position;
+    final double rawDelta = event.scrollDelta.dy.abs() > event.scrollDelta.dx.abs()
+        ? event.scrollDelta.dy
+        : event.scrollDelta.dx;
+    if (rawDelta == 0) {
+      return;
+    }
+
+    final double target = (_categoryController.offset + rawDelta)
+        .clamp(0.0, position.maxScrollExtent);
+
+    if (target != _categoryController.offset) {
+      _categoryController.jumpTo(target);
+    }
+  }
+
+  Widget _buildCategoryScrollButton({
+    required IconData icon,
+    required double delta,
+  }) {
+    return SizedBox(
+      width: 36,
+      child: AnimatedBuilder(
+        animation: _categoryController,
+        builder: (context, _) {
+          final bool canScroll = _categoryController.hasClients &&
+              ((delta < 0 && _categoryController.offset > 0) ||
+                  (delta > 0 &&
+                      _categoryController.offset <
+                          _categoryController.position.maxScrollExtent));
+
+          return IconButton(
+            icon: Icon(icon, size: 24),
+            color: canScroll ? AppColors.primary : Colors.grey.shade400,
+            tooltip: delta < 0 ? 'Ver anteriores' : 'Ver siguientes',
+            onPressed: canScroll ? () => _scrollCategories(delta) : null,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -219,84 +290,101 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
 
           // Selector de categoría
           SizedBox(
-            height: 80,
-            child: ScrollConfiguration(
-              behavior: ScrollConfiguration.of(context).copyWith(
-                dragDevices: const {
-                  PointerDeviceKind.touch,
-                  PointerDeviceKind.mouse,
-                  PointerDeviceKind.trackpad,
-                  PointerDeviceKind.stylus,
-                },
-              ),
-              child: Scrollbar(
-                controller: _categoryController,
-                thumbVisibility: true,
-                interactive: true,
-                child: ListView.builder(
-                  controller: _categoryController,
-                  scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: AvatarCatalog.categories.length,
-                  itemBuilder: (context, index) {
-                    final category = AvatarCatalog.categories[index];
-                    final isSelected = _selectedCategory == category;
+            height: 88,
+            child: Row(
+              children: [
+                _buildCategoryScrollButton(
+                  icon: Icons.chevron_left,
+                  delta: -140,
+                ),
+                Expanded(
+                  child: ScrollConfiguration(
+                    behavior: ScrollConfiguration.of(context).copyWith(
+                      dragDevices: const {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse,
+                        PointerDeviceKind.trackpad,
+                        PointerDeviceKind.stylus,
+                      },
+                    ),
+                    child: Scrollbar(
+                      controller: _categoryController,
+                      thumbVisibility: true,
+                      interactive: true,
+                      child: Listener(
+                        onPointerSignal: _handleCategoryPointerSignal,
+                        child: ListView.builder(
+                          controller: _categoryController,
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          itemCount: AvatarCatalog.categories.length,
+                          itemBuilder: (context, index) {
+                            final category = AvatarCatalog.categories[index];
+                            final isSelected = _selectedCategory == category;
 
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: Material(
-                        color:
-                            isSelected ? AppColors.primary : Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(16),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(16),
-                          onTap: () {
-                            setState(() {
-                              _selectedCategory = category;
-                            });
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: Material(
                                 color: isSelected
                                     ? AppColors.primary
-                                    : Colors.grey.shade300,
-                                width: 2,
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  AvatarCatalog.getCategoryIcon(category),
-                                  style: const TextStyle(fontSize: 24),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  AvatarCatalog.getCategoryName(category),
-                                  style: GoogleFonts.fredoka(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: isSelected
-                                        ? Colors.white
-                                        : AppColors.textPrimary,
+                                    : Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(16),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(16),
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedCategory = category;
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? AppColors.primary
+                                            : Colors.grey.shade300,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          AvatarCatalog.getCategoryIcon(category),
+                                          style: const TextStyle(fontSize: 24),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          AvatarCatalog.getCategoryName(category),
+                                          style: GoogleFonts.fredoka(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            color: isSelected
+                                                ? Colors.white
+                                                : AppColors.textPrimary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
                         ),
                       ),
-                    );
-                  },
+                    ),
                 ),
-              ),
+                _buildCategoryScrollButton(
+                  icon: Icons.chevron_right,
+                  delta: 140,
+                ),
+              ],
             ),
           ),
 
@@ -372,7 +460,8 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary.withValues(alpha: 0.1) : Colors.white,
+              color:
+                  isSelected ? AppColors.primary.withOpacity(0.1) : Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: isSelected ? AppColors.primary : Colors.grey.shade300,

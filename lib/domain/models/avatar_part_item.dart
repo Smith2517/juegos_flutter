@@ -1,5 +1,3 @@
-library;
-
 /// Elemento del catálogo de avatares.
 ///
 /// Define una pieza intercambiable que puede formar parte del avatar.
