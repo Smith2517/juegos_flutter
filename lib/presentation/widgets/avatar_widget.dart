@@ -196,6 +196,7 @@ class _AvatarWidgetState extends State<AvatarWidget>
       );
     }
 
+//<<<<<<< codex/review-project-3s7az0
     return SizedBox(
       width: widget.size,
       height: widget.size * 1.4,
@@ -203,6 +204,15 @@ class _AvatarWidgetState extends State<AvatarWidget>
     );
   }
 
+//=======
+    return SizedBox(
+      width: widget.size,
+      height: widget.size,
+      child: avatarContent,
+    );
+  }
+
+//>>>>>>> main
   Widget _buildAvatarStack(String expression) {
     final background = AvatarCatalog.getPartById(widget.avatar.background);
     final face = AvatarCatalog.getPartById(widget.avatar.face);
