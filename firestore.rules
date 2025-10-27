@@ -1,0 +1,124 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isValidUser() {
+      return request.resource.data.userId == request.auth.uid;
+    }
+
+    // Users collection
+    match /users/{userId} {
+      // Users can read and write their own data
+      allow read: if isAuthenticated() && isOwner(userId);
+
+      // Users can create their own profile
+      allow create: if isAuthenticated() &&
+                       isOwner(userId) &&
+                       request.resource.data.userId == request.auth.uid;
+
+      // Users can update their own profile
+      allow update: if isAuthenticated() &&
+                       isOwner(userId) &&
+                       request.resource.data.userId == request.auth.uid;
+
+      // No deletion allowed
+      allow delete: if false;
+    }
+
+    // Progress collection
+    match /progress/{progressId} {
+      // Users can read their own progress
+      allow read: if isAuthenticated() &&
+                     resource.data.userId == request.auth.uid;
+
+      // Users can create their own progress
+      allow create: if isAuthenticated() &&
+                       request.resource.data.userId == request.auth.uid;
+
+      // Users can update their own progress
+      allow update: if isAuthenticated() &&
+                       resource.data.userId == request.auth.uid &&
+                       request.resource.data.userId == request.auth.uid;
+
+      // Users can delete their own progress
+      allow delete: if isAuthenticated() &&
+                       resource.data.userId == request.auth.uid;
+    }
+
+    // Rewards collection
+    match /rewards/{userId} {
+      // Users can read their own rewards
+      allow read: if isAuthenticated() && isOwner(userId);
+
+      // Users can create and update their own rewards
+      allow create, update: if isAuthenticated() &&
+                               isOwner(userId) &&
+                               request.resource.data.userId == request.auth.uid;
+
+      // No deletion allowed
+      allow delete: if false;
+    }
+
+    // Games collection (read-only for users)
+    match /games/{gameId} {
+      // Anyone authenticated can read games
+      allow read: if isAuthenticated();
+
+      // Only admin can write (set via Firebase Console)
+      allow write: if false;
+    }
+
+    // Questions collection (read-only for users)
+    match /questions/{questionId} {
+      // Anyone authenticated can read questions
+      allow read: if isAuthenticated();
+
+      // Only admin can write
+      allow write: if false;
+    }
+
+    // Achievements collection (read-only)
+    match /achievements/{achievementId} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+
+    // Categories collection (read-only)
+    match /categories/{categoryId} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+
+    // User creations (drawings, etc.)
+    match /user_creations/{userId}/{document=**} {
+      // Users can manage their own creations
+      allow read, write: if isAuthenticated() && isOwner(userId);
+    }
+
+    // Parental controls
+    match /parental_controls/{userId} {
+      // Only the user (parent) can access
+      allow read, write: if isAuthenticated() && isOwner(userId);
+    }
+
+    // Analytics (write-only for privacy)
+    match /analytics/{document=**} {
+      allow read: if false;
+      allow write: if isAuthenticated();
+    }
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
