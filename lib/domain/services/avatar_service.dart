@@ -13,6 +13,7 @@ library;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/avatar_model.dart';
+import '../models/avatar_part_item.dart';
 import '../../app/config/avatar_catalog.dart';
 
 class AvatarService {
