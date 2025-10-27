@@ -28,15 +28,15 @@ class _LayerLayout {
 }
 
 const Map<String, _LayerLayout> _layerLayouts = {
-  'face': _LayerLayout(widthFactor: 0.7, heightFactor: 0.44, topFactor: 0.22),
-  'eyes': _LayerLayout(widthFactor: 0.42, heightFactor: 0.13, topFactor: 0.34),
-  'mouth': _LayerLayout(widthFactor: 0.34, heightFactor: 0.12, topFactor: 0.48),
-  'hair': _LayerLayout(widthFactor: 0.9, heightFactor: 0.42, topFactor: 0.02),
-  'accessory': _LayerLayout(widthFactor: 0.74, heightFactor: 0.2, topFactor: 0.33),
-  'top': _LayerLayout(widthFactor: 0.82, heightFactor: 0.44, topFactor: 0.54),
-  'hands': _LayerLayout(widthFactor: 0.96, heightFactor: 0.3, topFactor: 0.68),
-  'bottom': _LayerLayout(widthFactor: 0.78, heightFactor: 0.36, topFactor: 0.76),
-  'shoes': _LayerLayout(widthFactor: 0.68, heightFactor: 0.2, topFactor: 0.9),
+  'face': _LayerLayout(widthFactor: 0.68, heightFactor: 0.46, topFactor: 0.18),
+  'eyes': _LayerLayout(widthFactor: 0.36, heightFactor: 0.16, topFactor: 0.32),
+  'mouth': _LayerLayout(widthFactor: 0.32, heightFactor: 0.12, topFactor: 0.46),
+  'hair': _LayerLayout(widthFactor: 0.96, heightFactor: 0.48, topFactor: -0.02),
+  'accessory': _LayerLayout(widthFactor: 0.72, heightFactor: 0.22, topFactor: 0.32),
+  'top': _LayerLayout(widthFactor: 0.84, heightFactor: 0.46, topFactor: 0.4),
+  'hands': _LayerLayout(widthFactor: 1.02, heightFactor: 0.32, topFactor: 0.52),
+  'bottom': _LayerLayout(widthFactor: 0.76, heightFactor: 0.34, topFactor: 0.66),
+  'shoes': _LayerLayout(widthFactor: 0.72, heightFactor: 0.2, topFactor: 0.84),
 };
 
 class AvatarWidget extends StatefulWidget {
@@ -60,7 +60,7 @@ class AvatarWidget extends StatefulWidget {
 class _AvatarWidgetState extends State<AvatarWidget>
     with SingleTickerProviderStateMixin {
   static const double _canvasWidth = 300;
-  static const double _canvasHeight = 480;
+  static const double _canvasHeight = 420;
 
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
@@ -314,6 +314,21 @@ class _AvatarWidgetState extends State<AvatarWidget>
         ),
       );
     }
+
+    children.add(
+      Positioned(
+        bottom: 16 * scale,
+        left: canvasWidth * 0.2,
+        right: canvasWidth * 0.2,
+        child: Container(
+          height: 18 * scale,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.08),
+            borderRadius: BorderRadius.circular(20 * scale),
+          ),
+        ),
+      ),
+    );
 
     addLayer(bottom, 'bottom');
     addLayer(shoes, 'shoes');
