@@ -13,6 +13,32 @@ import '../../app/config/avatar_catalog.dart';
 import '../../domain/models/avatar_model.dart';
 import '../../domain/models/avatar_part_item.dart';
 
+class _LayerLayout {
+  final double widthFactor;
+  final double heightFactor;
+  final double topFactor;
+  final double dxFactor;
+
+  const _LayerLayout({
+    required this.widthFactor,
+    required this.heightFactor,
+    required this.topFactor,
+    this.dxFactor = 0,
+  });
+}
+
+const Map<String, _LayerLayout> _layerLayouts = {
+  'face': _LayerLayout(widthFactor: 0.7, heightFactor: 0.44, topFactor: 0.22),
+  'eyes': _LayerLayout(widthFactor: 0.42, heightFactor: 0.13, topFactor: 0.34),
+  'mouth': _LayerLayout(widthFactor: 0.34, heightFactor: 0.12, topFactor: 0.48),
+  'hair': _LayerLayout(widthFactor: 0.9, heightFactor: 0.42, topFactor: 0.02),
+  'accessory': _LayerLayout(widthFactor: 0.74, heightFactor: 0.2, topFactor: 0.33),
+  'top': _LayerLayout(widthFactor: 0.82, heightFactor: 0.44, topFactor: 0.54),
+  'hands': _LayerLayout(widthFactor: 0.96, heightFactor: 0.3, topFactor: 0.68),
+  'bottom': _LayerLayout(widthFactor: 0.78, heightFactor: 0.36, topFactor: 0.76),
+  'shoes': _LayerLayout(widthFactor: 0.68, heightFactor: 0.2, topFactor: 0.9),
+};
+
 class AvatarWidget extends StatefulWidget {
   final AvatarModel avatar;
   final double size;
@@ -34,7 +60,7 @@ class AvatarWidget extends StatefulWidget {
 class _AvatarWidgetState extends State<AvatarWidget>
     with SingleTickerProviderStateMixin {
   static const double _canvasWidth = 300;
-  static const double _canvasHeight = 520;
+  static const double _canvasHeight = 480;
 
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
@@ -220,6 +246,7 @@ class _AvatarWidgetState extends State<AvatarWidget>
 
     final double scale = _scaleFactor;
     final double canvasHeight = _canvasHeight * scale;
+    final double canvasWidth = widget.size;
     final Color baseBackgroundColor = _resolveBackgroundColor(background);
 
     final children = <Widget>[
@@ -267,10 +294,10 @@ class _AvatarWidgetState extends State<AvatarWidget>
         return;
       }
 
-      final double layerWidth = layout.widthFactor * widget.size;
+      final double layerWidth = layout.widthFactor * canvasWidth;
       final double layerHeight = layout.heightFactor * canvasHeight;
       final double left =
-          (widget.size - layerWidth) / 2 + layout.dxFactor * widget.size;
+          (canvasWidth - layerWidth) / 2 + layout.dxFactor * canvasWidth;
       final double top = layout.topFactor * canvasHeight;
 
       children.add(
@@ -339,59 +366,6 @@ class _AvatarWidgetState extends State<AvatarWidget>
     }
   }
 }
-
-class _LayerLayout {
-  final double widthFactor;
-  final double heightFactor;
-  final double topFactor;
-  final double dxFactor;
-
-  const _LayerLayout({
-    required this.widthFactor,
-    required this.heightFactor,
-    required this.topFactor,
-    this.dxFactor = 0,
-  });
-}
-
-const Map<String, _LayerLayout> _layerLayouts = {
-  'face': _LayerLayout(widthFactor: 0.68, heightFactor: 0.44, topFactor: 0.2),
-  'eyes': _LayerLayout(widthFactor: 0.46, heightFactor: 0.12, topFactor: 0.34),
-  'mouth': _LayerLayout(widthFactor: 0.38, heightFactor: 0.12, topFactor: 0.48),
-  'hair': _LayerLayout(widthFactor: 0.84, heightFactor: 0.38, topFactor: 0.02),
-  'accessory':
-      _LayerLayout(widthFactor: 0.7, heightFactor: 0.2, topFactor: 0.31),
-  'top': _LayerLayout(widthFactor: 0.78, heightFactor: 0.42, topFactor: 0.52),
-  'hands': _LayerLayout(widthFactor: 0.92, heightFactor: 0.28, topFactor: 0.66),
-  'bottom': _LayerLayout(widthFactor: 0.74, heightFactor: 0.34, topFactor: 0.74),
-  'shoes': _LayerLayout(widthFactor: 0.72, heightFactor: 0.18, topFactor: 0.88),
-};
-
-class _LayerLayout {
-  final double width;
-  final double height;
-  final double top;
-  final double dx;
-
-  const _LayerLayout({
-    required this.width,
-    required this.height,
-    required this.top,
-    this.dx = 0,
-  });
-}
-
-const Map<String, _LayerLayout> _layerLayouts = {
-  'face': _LayerLayout(width: 210, height: 240, top: 120),
-  'eyes': _LayerLayout(width: 150, height: 80, top: 190),
-  'mouth': _LayerLayout(width: 130, height: 70, top: 250),
-  'hair': _LayerLayout(width: 260, height: 200, top: 30),
-  'accessory': _LayerLayout(width: 220, height: 130, top: 180),
-  'top': _LayerLayout(width: 230, height: 240, top: 270),
-  'hands': _LayerLayout(width: 270, height: 160, top: 320),
-  'bottom': _LayerLayout(width: 220, height: 210, top: 390),
-  'shoes': _LayerLayout(width: 220, height: 120, top: 470),
-};
 
 /// Widget de Avatar Simple (sin animaciones, para listas)
 class SimpleAvatarWidget extends StatelessWidget {
