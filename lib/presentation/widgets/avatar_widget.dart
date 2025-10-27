@@ -196,6 +196,15 @@ class _AvatarWidgetState extends State<AvatarWidget>
       );
     }
 
+//<<<<<<< codex/review-project-3s7az0
+    return SizedBox(
+      width: widget.size,
+      height: widget.size * 1.4,
+      child: avatarContent,
+    );
+  }
+
+//=======
     return SizedBox(
       width: widget.size,
       height: widget.size,
@@ -203,6 +212,7 @@ class _AvatarWidgetState extends State<AvatarWidget>
     );
   }
 
+//>>>>>>> main
   Widget _buildAvatarStack(String expression) {
     final background = AvatarCatalog.getPartById(widget.avatar.background);
     final face = AvatarCatalog.getPartById(widget.avatar.face);
@@ -215,9 +225,64 @@ class _AvatarWidgetState extends State<AvatarWidget>
     final bottom = AvatarCatalog.getPartById(widget.avatar.bottom);
     final shoes = AvatarCatalog.getPartById(widget.avatar.shoes);
 
+    final double width = widget.size;
+    final double height = widget.size * 1.4;
+
+    final children = <Widget>[
+      if (background != null && background.assetPath.isNotEmpty)
+        Positioned.fill(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: SvgPicture.asset(
+              background.assetPath,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+    ];
+
+    void addLayer(
+      AvatarPartItem? part, {
+      required double top,
+      required double widthFactor,
+    }) {
+      if (part == null || part.assetPath.isEmpty) {
+        return;
+      }
+
+      final double layerWidth = width * widthFactor;
+      final double aspectRatio = _aspectRatioForPart(part);
+      final double layerHeight =
+          aspectRatio == 0 ? layerWidth : layerWidth / aspectRatio;
+
+      children.add(
+        Positioned(
+          top: top,
+          left: (width - layerWidth) / 2,
+          width: layerWidth,
+          height: layerHeight,
+          child: _buildSvg(
+            part,
+            width: layerWidth,
+            height: layerHeight,
+          ),
+        ),
+      );
+    }
+
+    addLayer(hair, top: width * 0.05, widthFactor: 0.76);
+    addLayer(bottom, top: width * 0.95, widthFactor: 0.44);
+    addLayer(shoes, top: width * 1.12, widthFactor: 0.52);
+    addLayer(top, top: width * 0.82, widthFactor: 0.52);
+    addLayer(hands, top: width * 0.88, widthFactor: 0.7);
+    addLayer(face, top: width * 0.3, widthFactor: 0.64);
+    addLayer(mouth, top: width * 0.72, widthFactor: 0.36);
+    addLayer(eyes, top: width * 0.52, widthFactor: 0.5);
+    addLayer(accessory, top: width * 0.26, widthFactor: 0.6);
+
     return Container(
-      width: widget.size,
-      height: widget.size,
+      width: width,
+      height: height,
       decoration: BoxDecoration(
         color: _resolveBackgroundColor(background),
         borderRadius: BorderRadius.circular(20),
@@ -230,91 +295,55 @@ class _AvatarWidgetState extends State<AvatarWidget>
         ],
       ),
       child: Stack(
-        fit: StackFit.expand,
-        children: [
-          if (background != null && background.assetPath.isNotEmpty)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: SvgPicture.asset(
-                background.assetPath,
-                fit: BoxFit.cover,
-              ),
-            ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: widget.size * 0.05),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  height: widget.size * 0.18,
-                  child: Stack(
-                    alignment: Alignment.topCenter,
-                    clipBehavior: Clip.none,
-                    children: [
-                      _buildSvg(hair, widget.size * 0.18),
-                      Positioned(
-                        top: -widget.size * 0.02,
-                        child: _buildSvg(accessory, widget.size * 0.16),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: widget.size * 0.26,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      _buildSvg(face, widget.size * 0.26),
-                      _buildSvg(eyes, widget.size * 0.16),
-                      Positioned(
-                        bottom: widget.size * 0.05,
-                        child: _buildSvg(mouth, widget.size * 0.12),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: widget.size * 0.24,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      _buildSvg(top, widget.size * 0.24),
-                      Positioned.fill(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: _buildSvg(hands, widget.size * 0.26),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: widget.size * 0.18,
-                  child: _buildSvg(bottom, widget.size * 0.18),
-                ),
-                SizedBox(
-                  height: widget.size * 0.14,
-                  child: _buildSvg(shoes, widget.size * 0.14),
-                ),
-              ],
-            ),
-          ),
-        ],
+        clipBehavior: Clip.none,
+        children: children,
       ),
     );
   }
 
-  Widget _buildSvg(AvatarPartItem? part, double size) {
+  Widget _buildSvg(
+    AvatarPartItem? part, {
+    double? width,
+    double? height,
+  }) {
     if (part == null || part.assetPath.isEmpty) {
       return const SizedBox.shrink();
     }
 
     return SvgPicture.asset(
       part.assetPath,
-      width: size,
-      height: size,
+      width: width,
+      height: height,
       fit: BoxFit.contain,
     );
+  }
+
+  double _aspectRatioForPart(AvatarPartItem? part) {
+    if (part == null) {
+      return 1.0;
+    }
+
+    switch (part.category) {
+      case 'hair':
+        return 220 / 160;
+      case 'accessory':
+        return 220 / 140;
+      case 'eyes':
+        return 200 / 120;
+      case 'mouth':
+        return 200 / 120;
+      case 'top':
+        return 240 / 210;
+      case 'hands':
+        return 240 / 160;
+      case 'bottom':
+        return 1.0;
+      case 'shoes':
+        return 240 / 120;
+      case 'face':
+      default:
+        return 1.0;
+    }
   }
 
   Color _resolveBackgroundColor(AvatarPartItem? background) {
