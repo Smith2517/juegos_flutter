@@ -9,8 +9,10 @@ library;
 /// Fecha: 2025
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../domain/models/avatar_model.dart';
+import '../../domain/models/avatar_part_item.dart';
 import '../../domain/services/avatar_service.dart';
 import '../../app/config/avatar_catalog.dart';
 import '../../app/theme/colors.dart';
@@ -42,14 +44,14 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
     _currentAvatar = widget.avatar;
   }
 
-  Future<void> _updateAvatarPart(String category, String emoji) async {
+  Future<void> _updateAvatarPart(String category, String partId) async {
     setState(() => _isUpdating = true);
 
     try {
       await _avatarService.updateAvatarPart(
         userId: widget.userId,
         category: category,
-        emoji: emoji,
+        partId: partId,
       );
 
       if (mounted) {
@@ -87,6 +89,10 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
     switch (category) {
       case 'face':
         return _currentAvatar.unlockedFaces;
+      case 'eyes':
+        return _currentAvatar.unlockedEyes;
+      case 'mouth':
+        return _currentAvatar.unlockedMouths;
       case 'hair':
         return _currentAvatar.unlockedHairs;
       case 'top':
@@ -95,6 +101,8 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
         return _currentAvatar.unlockedBottoms;
       case 'shoes':
         return _currentAvatar.unlockedShoes;
+      case 'hands':
+        return _currentAvatar.unlockedHands;
       case 'accessory':
         return _currentAvatar.unlockedAccessories;
       case 'background':
@@ -108,6 +116,10 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
     switch (category) {
       case 'face':
         return _currentAvatar.face;
+      case 'eyes':
+        return _currentAvatar.eyes;
+      case 'mouth':
+        return _currentAvatar.mouth;
       case 'hair':
         return _currentAvatar.hair;
       case 'top':
@@ -116,6 +128,8 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
         return _currentAvatar.bottom;
       case 'shoes':
         return _currentAvatar.shoes;
+      case 'hands':
+        return _currentAvatar.hands;
       case 'accessory':
         return _currentAvatar.accessory;
       case 'background':
@@ -261,14 +275,13 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
   }
 
   Widget _buildPartsList() {
-    final unlockedEmojis = _getUnlockedList(_selectedCategory);
+    final unlockedIds = _getUnlockedList(_selectedCategory);
     final currentPart = _getCurrentPart(_selectedCategory);
     final allParts = AvatarCatalog.getPartsByCategory(_selectedCategory);
 
     // Filtrar solo las partes desbloqueadas
-    final availableParts = allParts
-        .where((part) => unlockedEmojis.contains(part.emoji))
-        .toList();
+    final availableParts =
+        allParts.where((part) => unlockedIds.contains(part.id)).toList();
 
     if (availableParts.isEmpty) {
       return Center(
@@ -312,11 +325,11 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
       itemCount: availableParts.length,
       itemBuilder: (context, index) {
         final part = availableParts[index];
-        final isSelected = currentPart == part.emoji;
+        final isSelected = currentPart == part.id;
 
         return GestureDetector(
           onTap: () {
-            _updateAvatarPart(_selectedCategory, part.emoji);
+            _updateAvatarPart(_selectedCategory, part.id);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -330,10 +343,7 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  part.emoji == 'none' ? '❌' : part.emoji,
-                  style: const TextStyle(fontSize: 40),
-                ),
+                _PartPreview(part: part),
                 const SizedBox(height: 4),
                 Text(
                   part.name,
@@ -368,6 +378,35 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
           ),
         );
       },
+    );
+  }
+}
+
+class _PartPreview extends StatelessWidget {
+  final AvatarPartItem part;
+
+  const _PartPreview({required this.part});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final fallback = Text(
+      part.emoji == null || part.emoji!.isEmpty ? '🎨' : part.emoji!,
+      style: theme.textTheme.displaySmall?.copyWith(fontSize: 40),
+    );
+
+    if (part.assetPath.isEmpty) {
+      return fallback;
+    }
+
+    return Center(
+      child: SvgPicture.asset(
+        part.assetPath,
+        width: 56,
+        height: 56,
+        fit: BoxFit.contain,
+        placeholderBuilder: (_) => fallback,
+      ),
     );
   }
 }
