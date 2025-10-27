@@ -1,5 +1,3 @@
-library;
-
 /// Sheet de Personalización de Avatar
 ///
 /// Permite al usuario cambiar las partes de su avatar
@@ -234,55 +232,65 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
               child: Scrollbar(
                 controller: _categoryController,
                 thumbVisibility: true,
+                interactive: true,
                 child: ListView.builder(
                   controller: _categoryController,
                   scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: AvatarCatalog.categories.length,
                   itemBuilder: (context, index) {
                     final category = AvatarCatalog.categories[index];
                     final isSelected = _selectedCategory == category;
 
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _selectedCategory = category;
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 12),
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color:
-                              isSelected ? AppColors.primary : Colors.grey.shade100,
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Material(
+                        color:
+                            isSelected ? AppColors.primary : Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(16),
+                        child: InkWell(
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: isSelected
-                                ? AppColors.primary
-                                : Colors.grey.shade300,
-                            width: 2,
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              AvatarCatalog.getCategoryIcon(category),
-                              style: const TextStyle(fontSize: 24),
+                          onTap: () {
+                            setState(() {
+                              _selectedCategory = category;
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              AvatarCatalog.getCategoryName(category),
-                              style: GoogleFonts.fredoka(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
                                 color: isSelected
-                                    ? Colors.white
-                                    : AppColors.textPrimary,
+                                    ? AppColors.primary
+                                    : Colors.grey.shade300,
+                                width: 2,
                               ),
                             ),
-                          ],
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  AvatarCatalog.getCategoryIcon(category),
+                                  style: const TextStyle(fontSize: 24),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  AvatarCatalog.getCategoryName(category),
+                                  style: GoogleFonts.fredoka(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : AppColors.textPrimary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     );

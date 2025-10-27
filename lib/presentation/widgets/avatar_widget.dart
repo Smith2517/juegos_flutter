@@ -1,9 +1,7 @@
-library;
-
 /// Widget de Avatar Animado
 ///
-/// Renderiza un avatar personalizado con emojis y animaciones.
-/// Soporta múltiples expresiones y animaciones.
+/// Renderiza un avatar personalizado utilizando capas SVG con un estilo
+/// caricaturesco. Mantiene compatibilidad con las expresiones animadas.
 ///
 /// Autor: Sistema Educativo
 /// Fecha: 2025
@@ -35,6 +33,9 @@ class AvatarWidget extends StatefulWidget {
 
 class _AvatarWidgetState extends State<AvatarWidget>
     with SingleTickerProviderStateMixin {
+  static const double _canvasWidth = 300;
+  static const double _canvasHeight = 520;
+
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<double> _bounceAnimation;
@@ -196,23 +197,15 @@ class _AvatarWidgetState extends State<AvatarWidget>
       );
     }
 
-//<<<<<<< codex/review-project-3s7az0
     return SizedBox(
       width: widget.size,
-      height: widget.size * 1.4,
+      height: _canvasHeight * _scaleFactor,
       child: avatarContent,
     );
   }
 
-//=======
-    return SizedBox(
-      width: widget.size,
-      height: widget.size,
-      child: avatarContent,
-    );
-  }
+  double get _scaleFactor => widget.size / _canvasWidth;
 
-//>>>>>>> main
   Widget _buildAvatarStack(String expression) {
     final background = AvatarCatalog.getPartById(widget.avatar.background);
     final face = AvatarCatalog.getPartById(widget.avatar.face);
@@ -225,40 +218,57 @@ class _AvatarWidgetState extends State<AvatarWidget>
     final bottom = AvatarCatalog.getPartById(widget.avatar.bottom);
     final shoes = AvatarCatalog.getPartById(widget.avatar.shoes);
 
-    final double width = widget.size;
-    final double height = widget.size * 1.4;
+    final scale = _scaleFactor;
+    final canvasHeight = _canvasHeight * scale;
 
     final children = <Widget>[
-      if (background != null && background.assetPath.isNotEmpty)
-        Positioned.fill(
+      Positioned.fill(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: _resolveBackgroundColor(background),
+            borderRadius: BorderRadius.circular(24 * scale),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 18 * scale,
+                offset: Offset(0, 10 * scale),
+              ),
+            ],
+          ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: SvgPicture.asset(
-              background.assetPath,
-              fit: BoxFit.cover,
-            ),
+            borderRadius: BorderRadius.circular(24 * scale),
+            child: background != null && background.assetPath.isNotEmpty
+                ? SvgPicture.asset(
+                    background.assetPath,
+                    fit: BoxFit.cover,
+                  )
+                : const SizedBox.shrink(),
           ),
         ),
+      ),
     ];
 
-    void addLayer(
-      AvatarPartItem? part, {
-      required double top,
-      required double widthFactor,
-    }) {
+    void addLayer(AvatarPartItem? part, String key) {
       if (part == null || part.assetPath.isEmpty) {
         return;
       }
 
-      final double layerWidth = width * widthFactor;
-      final double aspectRatio = _aspectRatioForPart(part);
-      final double layerHeight =
-          aspectRatio == 0 ? layerWidth : layerWidth / aspectRatio;
+      final layout = _layerLayouts[key];
+      if (layout == null) {
+        children.add(Center(child: _buildSvg(part)));
+        return;
+      }
+
+      final double layerWidth = layout.width * scale;
+      final double layerHeight = layout.height * scale;
+      final double left =
+          (widget.size - layerWidth) / 2 + layout.dx * scale;
+      final double top = layout.top * scale;
 
       children.add(
         Positioned(
           top: top,
-          left: (width - layerWidth) / 2,
+          left: left,
           width: layerWidth,
           height: layerHeight,
           child: _buildSvg(
@@ -270,30 +280,19 @@ class _AvatarWidgetState extends State<AvatarWidget>
       );
     }
 
-    addLayer(hair, top: width * 0.05, widthFactor: 0.76);
-    addLayer(bottom, top: width * 0.95, widthFactor: 0.44);
-    addLayer(shoes, top: width * 1.12, widthFactor: 0.52);
-    addLayer(top, top: width * 0.82, widthFactor: 0.52);
-    addLayer(hands, top: width * 0.88, widthFactor: 0.7);
-    addLayer(face, top: width * 0.3, widthFactor: 0.64);
-    addLayer(mouth, top: width * 0.72, widthFactor: 0.36);
-    addLayer(eyes, top: width * 0.52, widthFactor: 0.5);
-    addLayer(accessory, top: width * 0.26, widthFactor: 0.6);
+    addLayer(bottom, 'bottom');
+    addLayer(shoes, 'shoes');
+    addLayer(top, 'top');
+    addLayer(hands, 'hands');
+    addLayer(face, 'face');
+    addLayer(eyes, 'eyes');
+    addLayer(mouth, 'mouth');
+    addLayer(accessory, 'accessory');
+    addLayer(hair, 'hair');
 
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: _resolveBackgroundColor(background),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
+    return SizedBox(
+      width: widget.size,
+      height: canvasHeight,
       child: Stack(
         clipBehavior: Clip.none,
         children: children,
@@ -318,34 +317,6 @@ class _AvatarWidgetState extends State<AvatarWidget>
     );
   }
 
-  double _aspectRatioForPart(AvatarPartItem? part) {
-    if (part == null) {
-      return 1.0;
-    }
-
-    switch (part.category) {
-      case 'hair':
-        return 220 / 160;
-      case 'accessory':
-        return 220 / 140;
-      case 'eyes':
-        return 200 / 120;
-      case 'mouth':
-        return 200 / 120;
-      case 'top':
-        return 240 / 210;
-      case 'hands':
-        return 240 / 160;
-      case 'bottom':
-        return 1.0;
-      case 'shoes':
-        return 240 / 120;
-      case 'face':
-      default:
-        return 1.0;
-    }
-  }
-
   Color _resolveBackgroundColor(AvatarPartItem? background) {
     switch (background?.id) {
       case 'bg_library':
@@ -360,6 +331,32 @@ class _AvatarWidgetState extends State<AvatarWidget>
     }
   }
 }
+
+class _LayerLayout {
+  final double width;
+  final double height;
+  final double top;
+  final double dx;
+
+  const _LayerLayout({
+    required this.width,
+    required this.height,
+    required this.top,
+    this.dx = 0,
+  });
+}
+
+const Map<String, _LayerLayout> _layerLayouts = {
+  'face': _LayerLayout(width: 210, height: 240, top: 120),
+  'eyes': _LayerLayout(width: 150, height: 80, top: 190),
+  'mouth': _LayerLayout(width: 130, height: 70, top: 250),
+  'hair': _LayerLayout(width: 260, height: 200, top: 30),
+  'accessory': _LayerLayout(width: 220, height: 130, top: 180),
+  'top': _LayerLayout(width: 230, height: 240, top: 270),
+  'hands': _LayerLayout(width: 270, height: 160, top: 320),
+  'bottom': _LayerLayout(width: 220, height: 210, top: 390),
+  'shoes': _LayerLayout(width: 220, height: 120, top: 470),
+};
 
 /// Widget de Avatar Simple (sin animaciones, para listas)
 class SimpleAvatarWidget extends StatelessWidget {
