@@ -367,6 +367,32 @@ const Map<String, _LayerLayout> _layerLayouts = {
   'shoes': _LayerLayout(widthFactor: 0.72, heightFactor: 0.18, topFactor: 0.88),
 };
 
+class _LayerLayout {
+  final double width;
+  final double height;
+  final double top;
+  final double dx;
+
+  const _LayerLayout({
+    required this.width,
+    required this.height,
+    required this.top,
+    this.dx = 0,
+  });
+}
+
+const Map<String, _LayerLayout> _layerLayouts = {
+  'face': _LayerLayout(width: 210, height: 240, top: 120),
+  'eyes': _LayerLayout(width: 150, height: 80, top: 190),
+  'mouth': _LayerLayout(width: 130, height: 70, top: 250),
+  'hair': _LayerLayout(width: 260, height: 200, top: 30),
+  'accessory': _LayerLayout(width: 220, height: 130, top: 180),
+  'top': _LayerLayout(width: 230, height: 240, top: 270),
+  'hands': _LayerLayout(width: 270, height: 160, top: 320),
+  'bottom': _LayerLayout(width: 220, height: 210, top: 390),
+  'shoes': _LayerLayout(width: 220, height: 120, top: 470),
+};
+
 /// Widget de Avatar Simple (sin animaciones, para listas)
 class SimpleAvatarWidget extends StatelessWidget {
   final AvatarModel avatar;
