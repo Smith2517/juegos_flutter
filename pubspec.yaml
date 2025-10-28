@@ -66,19 +66,17 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-  # Assets comentados temporalmente (agregar cuando existan los archivos)
-  # assets:
-  #   - assets/images/
-  #   - assets/images/avatars/
-  #   - assets/images/backgrounds/
-  #   - assets/images/icons/
-  #   - assets/images/characters/
-  #   - assets/images/rewards/
-  #   - assets/images/rewards/badges/
-  #   - assets/images/rewards/stars/
-  #   - assets/sounds/
-  #   - assets/animations/
+  assets:
+    - assets/avatar/face/
+    - assets/avatar/eyes/
+    - assets/avatar/mouth/
+    - assets/avatar/hair/
+    - assets/avatar/top/
+    - assets/avatar/bottom/
+    - assets/avatar/shoes/
+    - assets/avatar/hands/
+    - assets/avatar/accessories/
+    - assets/avatar/backgrounds/
 
   # Fuentes: Se usan desde Google Fonts (no requieren archivos locales)
   # Cuando tengas los archivos .ttf, descomenta esto:
