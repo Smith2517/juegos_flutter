@@ -149,6 +149,18 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
     }
   }
 
+  Widget _buildCategorySelector() {
+    return _AvatarCategoryCarousel(
+      controller: _categoryController,
+      selectedCategory: _selectedCategory,
+      onCategorySelected: (category) {
+        setState(() {
+          _selectedCategory = category;
+        });
+      },
+    );
+  }
+
   void _scrollCategories(double delta) {
     if (!_categoryController.hasClients) {
       return;
@@ -669,6 +681,178 @@ class _PartPreview extends StatelessWidget {
         height: 56,
         fit: BoxFit.contain,
         placeholderBuilder: (_) => fallback,
+      ),
+    );
+  }
+}
+
+class _AvatarCategoryCarousel extends StatelessWidget {
+  final ScrollController controller;
+  final String selectedCategory;
+  final ValueChanged<String> onCategorySelected;
+
+  const _AvatarCategoryCarousel({
+    required this.controller,
+    required this.selectedCategory,
+    required this.onCategorySelected,
+  });
+
+  static const double _buttonDelta = 160;
+
+  void _scrollCategories(double delta) {
+    if (!controller.hasClients) {
+      return;
+    }
+
+    final ScrollPosition position = controller.position;
+    final double target = (controller.offset + delta)
+        .clamp(0.0, position.maxScrollExtent);
+
+    if (target == controller.offset) {
+      return;
+    }
+
+    controller.animateTo(
+      target,
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _handleCategoryPointerSignal(PointerSignalEvent event) {
+    if (event is! PointerScrollEvent || !controller.hasClients) {
+      return;
+    }
+
+    final ScrollPosition position = controller.position;
+    final Offset delta = event.scrollDelta;
+    final double rawDelta =
+        delta.dy.abs() > delta.dx.abs() ? delta.dy : delta.dx;
+
+    if (rawDelta == 0) {
+      return;
+    }
+
+    final double target = (controller.offset + rawDelta)
+        .clamp(0.0, position.maxScrollExtent);
+
+    if (target != controller.offset) {
+      controller.jumpTo(target);
+    }
+  }
+
+  Widget _buildCategoryChip(BuildContext context, String category) {
+    final bool isSelected = selectedCategory == category;
+    final Color chipColor =
+        isSelected ? AppColors.primary : Colors.grey.shade100;
+
+    return Material(
+      color: chipColor,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () => onCategorySelected(category),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color:
+                  isSelected ? AppColors.primary : Colors.grey.shade300,
+              width: 2,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                AvatarCatalog.getCategoryIcon(category),
+                style: const TextStyle(fontSize: 24),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                AvatarCatalog.getCategoryName(category),
+                style: GoogleFonts.fredoka(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color:
+                      isSelected ? Colors.white : AppColors.textPrimary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildScrollButton({
+    required IconData icon,
+    required double delta,
+  }) {
+    return SizedBox(
+      width: 36,
+      child: AnimatedBuilder(
+        animation: controller,
+        builder: (context, _) {
+          final ScrollController ctrl = controller;
+          final bool canScroll = ctrl.hasClients &&
+              ((delta < 0 && ctrl.offset > 0) ||
+                  (delta > 0 &&
+                      ctrl.offset < ctrl.position.maxScrollExtent));
+
+          return IconButton(
+            icon: Icon(icon, size: 24),
+            color: canScroll ? AppColors.primary : Colors.grey.shade400,
+            tooltip: delta < 0 ? 'Ver anteriores' : 'Ver siguientes',
+            onPressed: canScroll ? () => _scrollCategories(delta) : null,
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 88,
+      child: Row(
+        children: [
+          _buildScrollButton(icon: Icons.chevron_left, delta: -_buttonDelta),
+          Expanded(
+            child: ScrollConfiguration(
+              behavior: ScrollConfiguration.of(context).copyWith(
+                dragDevices: const {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                  PointerDeviceKind.trackpad,
+                  PointerDeviceKind.stylus,
+                },
+              ),
+              child: Listener(
+                onPointerSignal: _handleCategoryPointerSignal,
+                child: Scrollbar(
+                  controller: controller,
+                  thumbVisibility: true,
+                  interactive: true,
+                  child: ListView.separated(
+                    controller: controller,
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: AvatarCatalog.categories.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 12),
+                    itemBuilder: (context, index) {
+                      final category = AvatarCatalog.categories[index];
+                      return _buildCategoryChip(context, category);
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+          _buildScrollButton(icon: Icons.chevron_right, delta: _buttonDelta),
+        ],
       ),
     );
   }
