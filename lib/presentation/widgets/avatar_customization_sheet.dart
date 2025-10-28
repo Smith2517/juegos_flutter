@@ -149,6 +149,7 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
     }
   }
 
+  // --- ÚNICA definición: usa el widget separado para el carrusel de categorías.
   Widget _buildCategorySelector() {
     return _AvatarCategoryCarousel(
       controller: _categoryController,
@@ -158,307 +159,6 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
           _selectedCategory = category;
         });
       },
-    );
-  }
-
-  void _scrollCategories(double delta) {
-    if (!_categoryController.hasClients) {
-      return;
-    }
-
-    final ScrollPosition position = _categoryController.position;
-    final double target = (_categoryController.offset + delta)
-        .clamp(0.0, position.maxScrollExtent);
-
-    if (target == _categoryController.offset) {
-      return;
-    }
-
-    _categoryController.animateTo(
-      target,
-      duration: const Duration(milliseconds: 220),
-      curve: Curves.easeOut,
-    );
-  }
-
-  void _handleCategoryPointerSignal(PointerSignalEvent event) {
-    if (event is! PointerScrollEvent) {
-      return;
-    }
-
-    if (!_categoryController.hasClients) {
-      return;
-    }
-
-    final ScrollPosition position = _categoryController.position;
-    final double rawDelta = event.scrollDelta.dy.abs() > event.scrollDelta.dx.abs()
-        ? event.scrollDelta.dy
-        : event.scrollDelta.dx;
-    if (rawDelta == 0) {
-      return;
-    }
-
-    final double target = (_categoryController.offset + rawDelta)
-        .clamp(0.0, position.maxScrollExtent);
-
-    if (target != _categoryController.offset) {
-      _categoryController.jumpTo(target);
-    }
-  }
-
-  Widget _buildCategoryScrollButton({
-    required IconData icon,
-    required double delta,
-  }) {
-    return SizedBox(
-      width: 36,
-      child: AnimatedBuilder(
-        animation: _categoryController,
-        builder: (context, _) {
-          final controller = _categoryController;
-          final canScroll = controller.hasClients &&
-              ((delta < 0 && controller.offset > 0) ||
-                  (delta > 0 &&
-                      controller.offset < controller.position.maxScrollExtent));
-
-          return IconButton(
-            icon: Icon(icon, size: 24),
-            color: canScroll ? AppColors.primary : Colors.grey.shade400,
-            tooltip: delta < 0 ? 'Ver anteriores' : 'Ver siguientes',
-            onPressed: canScroll ? () => _scrollCategories(delta) : null,
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildCategoryChip(String category, bool isSelected) {
-    return Material(
-      color: isSelected ? AppColors.primary : Colors.grey.shade100,
-      borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () {
-          setState(() {
-            _selectedCategory = category;
-          });
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isSelected ? AppColors.primary : Colors.grey.shade300,
-              width: 2,
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                AvatarCatalog.getCategoryIcon(category),
-                style: const TextStyle(fontSize: 24),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                AvatarCatalog.getCategoryName(category),
-                style: GoogleFonts.fredoka(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: isSelected ? Colors.white : AppColors.textPrimary,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCategorySelector() {
-    return SizedBox(
-      height: 88,
-      child: Row(
-        children: [
-          _buildCategoryScrollButton(icon: Icons.chevron_left, delta: -160),
-          Expanded(
-            child: ScrollConfiguration(
-              behavior: ScrollConfiguration.of(context).copyWith(
-                dragDevices: const {
-                  PointerDeviceKind.touch,
-                  PointerDeviceKind.mouse,
-                  PointerDeviceKind.trackpad,
-                  PointerDeviceKind.stylus,
-                },
-              ),
-              child: Listener(
-                onPointerSignal: _handleCategoryPointerSignal,
-                child: Scrollbar(
-                  controller: _categoryController,
-                  thumbVisibility: true,
-                  interactive: true,
-                  child: ListView.separated(
-                    controller: _categoryController,
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: AvatarCatalog.categories.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 12),
-                    itemBuilder: (context, index) {
-                      final category = AvatarCatalog.categories[index];
-                      final isSelected = _selectedCategory == category;
-                      return _buildCategoryChip(category, isSelected);
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ),
-          _buildCategoryScrollButton(icon: Icons.chevron_right, delta: 160),
-        ],
-      ),
-    );
-  }
-
-  void _scrollCategories(double delta) {
-    if (!_categoryController.hasClients) {
-      return;
-    }
-
-    final ScrollPosition position = _categoryController.position;
-    final double target = (_categoryController.offset + delta)
-        .clamp(0.0, position.maxScrollExtent);
-
-    if (target == _categoryController.offset) {
-      return;
-    }
-
-    _categoryController.animateTo(
-      target,
-      duration: const Duration(milliseconds: 220),
-      curve: Curves.easeOut,
-    );
-  }
-
-  void _handleCategoryPointerSignal(PointerSignalEvent event) {
-    if (event is! PointerScrollEvent) {
-      return;
-    }
-
-    if (!_categoryController.hasClients) {
-      return;
-    }
-
-    final ScrollPosition position = _categoryController.position;
-    final double rawDelta = event.scrollDelta.dy.abs() > event.scrollDelta.dx.abs()
-        ? event.scrollDelta.dy
-        : event.scrollDelta.dx;
-    if (rawDelta == 0) {
-      return;
-    }
-
-    final double target = (_categoryController.offset + rawDelta)
-        .clamp(0.0, position.maxScrollExtent);
-
-    if (target != _categoryController.offset) {
-      _categoryController.jumpTo(target);
-    }
-  }
-
-  Widget _buildCategoryScrollButton({
-    required IconData icon,
-    required double delta,
-  }) {
-    return SizedBox(
-      width: 36,
-      child: AnimatedBuilder(
-        animation: _categoryController,
-        builder: (context, _) {
-          final bool canScroll = _categoryController.hasClients &&
-              ((delta < 0 && _categoryController.offset > 0) ||
-                  (delta > 0 &&
-                      _categoryController.offset <
-                          _categoryController.position.maxScrollExtent));
-
-          return IconButton(
-            icon: Icon(icon, size: 24),
-            color: canScroll ? AppColors.primary : Colors.grey.shade400,
-            tooltip: delta < 0 ? 'Ver anteriores' : 'Ver siguientes',
-            onPressed: canScroll ? () => _scrollCategories(delta) : null,
-          );
-        },
-      ),
-    );
-  }
-
-  void _scrollCategories(double delta) {
-    if (!_categoryController.hasClients) {
-      return;
-    }
-
-    final ScrollPosition position = _categoryController.position;
-    final double target = (_categoryController.offset + delta)
-        .clamp(0.0, position.maxScrollExtent);
-
-    if (target == _categoryController.offset) {
-      return;
-    }
-
-    _categoryController.animateTo(
-      target,
-      duration: const Duration(milliseconds: 220),
-      curve: Curves.easeOut,
-    );
-  }
-
-  void _handleCategoryPointerSignal(PointerSignalEvent event) {
-    if (event is! PointerScrollEvent) {
-      return;
-    }
-
-    if (!_categoryController.hasClients) {
-      return;
-    }
-
-    final ScrollPosition position = _categoryController.position;
-    final double rawDelta = event.scrollDelta.dy.abs() > event.scrollDelta.dx.abs()
-        ? event.scrollDelta.dy
-        : event.scrollDelta.dx;
-    if (rawDelta == 0) {
-      return;
-    }
-
-    final double target = (_categoryController.offset + rawDelta)
-        .clamp(0.0, position.maxScrollExtent);
-
-    if (target != _categoryController.offset) {
-      _categoryController.jumpTo(target);
-    }
-  }
-
-  Widget _buildCategoryScrollButton({
-    required IconData icon,
-    required double delta,
-  }) {
-    return SizedBox(
-      width: 36,
-      child: AnimatedBuilder(
-        animation: _categoryController,
-        builder: (context, _) {
-          final bool canScroll = _categoryController.hasClients &&
-              ((delta < 0 && _categoryController.offset > 0) ||
-                  (delta > 0 &&
-                      _categoryController.offset <
-                          _categoryController.position.maxScrollExtent));
-
-          return IconButton(
-            icon: Icon(icon, size: 24),
-            color: canScroll ? AppColors.primary : Colors.grey.shade400,
-            tooltip: delta < 0 ? 'Ver anteriores' : 'Ver siguientes',
-            onPressed: canScroll ? () => _scrollCategories(delta) : null,
-          );
-        },
-      ),
     );
   }
 
@@ -607,8 +307,7 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
           },
           child: Container(
             decoration: BoxDecoration(
-              color:
-                  isSelected ? AppColors.primary.withOpacity(0.1) : Colors.white,
+              color: isSelected ? AppColors.primary.withOpacity(0.1) : Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: isSelected ? AppColors.primary : Colors.grey.shade300,
@@ -700,17 +399,13 @@ class _AvatarCategoryCarousel extends StatelessWidget {
   static const double _buttonDelta = 160;
 
   void _scrollCategories(double delta) {
-    if (!controller.hasClients) {
-      return;
-    }
+    if (!controller.hasClients) return;
 
     final ScrollPosition position = controller.position;
-    final double target = (controller.offset + delta)
-        .clamp(0.0, position.maxScrollExtent);
+    final double target =
+        (controller.offset + delta).clamp(0.0, position.maxScrollExtent);
 
-    if (target == controller.offset) {
-      return;
-    }
+    if (target == controller.offset) return;
 
     controller.animateTo(
       target,
@@ -720,21 +415,16 @@ class _AvatarCategoryCarousel extends StatelessWidget {
   }
 
   void _handleCategoryPointerSignal(PointerSignalEvent event) {
-    if (event is! PointerScrollEvent || !controller.hasClients) {
-      return;
-    }
+    if (event is! PointerScrollEvent || !controller.hasClients) return;
 
     final ScrollPosition position = controller.position;
     final Offset delta = event.scrollDelta;
-    final double rawDelta =
-        delta.dy.abs() > delta.dx.abs() ? delta.dy : delta.dx;
+    final double rawDelta = delta.dy.abs() > delta.dx.abs() ? delta.dy : delta.dx;
 
-    if (rawDelta == 0) {
-      return;
-    }
+    if (rawDelta == 0) return;
 
-    final double target = (controller.offset + rawDelta)
-        .clamp(0.0, position.maxScrollExtent);
+    final double target =
+        (controller.offset + rawDelta).clamp(0.0, position.maxScrollExtent);
 
     if (target != controller.offset) {
       controller.jumpTo(target);
@@ -743,8 +433,7 @@ class _AvatarCategoryCarousel extends StatelessWidget {
 
   Widget _buildCategoryChip(BuildContext context, String category) {
     final bool isSelected = selectedCategory == category;
-    final Color chipColor =
-        isSelected ? AppColors.primary : Colors.grey.shade100;
+    final Color chipColor = isSelected ? AppColors.primary : Colors.grey.shade100;
 
     return Material(
       color: chipColor,
@@ -757,8 +446,7 @@ class _AvatarCategoryCarousel extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color:
-                  isSelected ? AppColors.primary : Colors.grey.shade300,
+              color: isSelected ? AppColors.primary : Colors.grey.shade300,
               width: 2,
             ),
           ),
@@ -775,8 +463,7 @@ class _AvatarCategoryCarousel extends StatelessWidget {
                 style: GoogleFonts.fredoka(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color:
-                      isSelected ? Colors.white : AppColors.textPrimary,
+                  color: isSelected ? Colors.white : AppColors.textPrimary,
                 ),
               ),
             ],
@@ -798,8 +485,7 @@ class _AvatarCategoryCarousel extends StatelessWidget {
           final ScrollController ctrl = controller;
           final bool canScroll = ctrl.hasClients &&
               ((delta < 0 && ctrl.offset > 0) ||
-                  (delta > 0 &&
-                      ctrl.offset < ctrl.position.maxScrollExtent));
+                  (delta > 0 && ctrl.offset < ctrl.position.maxScrollExtent));
 
           return IconButton(
             icon: Icon(icon, size: 24),
