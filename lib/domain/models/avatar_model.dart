@@ -230,17 +230,21 @@ class AvatarModel {
 
     final entries = List<String>.from(rawList as List);
     final fallback = defaultIds.isNotEmpty ? defaultIds.first : '';
+    final resolved = <String>{...defaultIds};
 
-    return entries
-        .map(
-          (value) => AvatarCatalog.resolvePartId(
-            value,
-            category: category,
-            fallbackId: fallback,
-          ),
-        )
-        .where((value) => value.isNotEmpty)
-        .toList();
+    for (final value in entries) {
+      final normalized = AvatarCatalog.resolvePartId(
+        value,
+        category: category,
+        fallbackId: fallback,
+      );
+
+      if (normalized.isNotEmpty) {
+        resolved.add(normalized);
+      }
+    }
+
+    return resolved.toList();
   }
 
   /// Copia el avatar con cambios
