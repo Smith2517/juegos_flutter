@@ -1,15 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
   <defs>
-    <linearGradient id="lipShade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ff9bab" />
-      <stop offset="1" stop-color="#cc2959" />
+    <linearGradient id="lipBase" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff9ca8" />
+      <stop offset="1" stop-color="#d23b63" />
     </linearGradient>
-    <linearGradient id="smileInner" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffd7df" />
-      <stop offset="1" stop-color="#f8f0f4" />
+    <linearGradient id="innerSmile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffeef2" />
+      <stop offset="1" stop-color="#f7c6d3" />
     </linearGradient>
   </defs>
-  <path d="M44 54c16 28 40 44 56 44s40-16 56-44" fill="none" stroke="#2d0b16" stroke-width="10" stroke-linecap="round" />
-  <path d="M50 66c12 20 30 32 50 32s38-12 50-32c3-5.2 10.8-6.2 15.2-2 4 3.7 4.6 9.9 1.4 14.3C150.4 121 126.1 138 100 138 73.9 138 49.6 121 33.4 78.3c-3.2-4.4-2.6-10.6 1.4-14.3 4.4-4.2 12.2-3.2 15.2 2z" fill="url(#lipShade)" />
-  <path d="M60 78c10 14 24 22 40 22s30-8 40-22c-12 10-26 16-40 16s-28-6-40-16z" fill="url(#smileInner)" />
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M44 70c16 26 40 40 56 40s40-14 56-40" fill="none" stroke="#2c2b40" stroke-width="8" />
+    <path d="M52 78c14 20 32 32 48 32s34-12 48-32c4.4-6.2 12.2-6.8 16.6-2 3.6 3.8 3.8 10.4-.2 14.6C146 146 122 162 100 162S54 146 35.6 90.6c-4-4.2-3.8-10.8-.2-14.6 4.4-4.8 12.2-4.2 16.6 2z" fill="url(#lipBase)" stroke="#2c2b40" stroke-width="4" />
+    <path d="M64 96c12 12 24 18 36 18s24-6 36-18c-10 6-24 10-36 10s-26-4-36-10z" fill="url(#innerSmile)" />
+  </g>
 </svg>

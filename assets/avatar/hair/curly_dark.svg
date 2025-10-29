@@ -1,11 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
   <defs>
-    <linearGradient id="curlyDark" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#4b2d24" />
-      <stop offset="1" stop-color="#1c0f0b" />
+    <linearGradient id="curlyBase" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5f381f" />
+      <stop offset="1" stop-color="#2b1709" />
     </linearGradient>
   </defs>
-  <path d="M34 132c4-38 10-76 30-92 24-20 48-18 74-8 24 10 42 32 42 70 0 14-4 30-12 42-4.4 6.5-13.8 7.6-19.7 2.3l-19.5-17.4c-4.6-4.1-11.6-4.1-16.2 0l-11.6 10.4c-5.7 5.1-14.2 4.4-18.9-1.5-8.8-11-24.8-21.6-46.1-5.8-1.2.9-3.4.4-2.9-1z" fill="url(#curlyDark)" />
-  <path d="M64 60c12-16 40-26 68-16" fill="none" stroke="#6a3a2c" stroke-width="12" stroke-linecap="round" opacity="0.5" />
-  <path d="M54 104c12-14 34-22 58-16" fill="none" stroke="#6a3a2c" stroke-width="10" stroke-linecap="round" opacity="0.4" />
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 120c-6-42 26-84 70-92s86 20 92 70c3 26-8 48-24 64-10-10-22-18-34-18-10 0-20 6-28 16-8-10-18-16-28-16-12 0-24 6-34 18-12-12-22-26-24-42z" fill="url(#curlyBase)" stroke="#2b1709" stroke-width="6" />
+    <path d="M46 80c10-18 30-36 54-38 24-2 46 12 56 30" fill="none" stroke="#885232" stroke-width="8" opacity="0.5" />
+    <path d="M44 132c12 12 28 20 44 20s32-8 44-20" fill="none" stroke="#885232" stroke-width="7" opacity="0.4" />
+  </g>
 </svg>

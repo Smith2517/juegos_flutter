@@ -1,11 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
   <defs>
-    <radialGradient id="afroTexture" cx="100" cy="60" r="90" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#3d2b24" />
-      <stop offset="1" stop-color="#1f130f" />
+    <radialGradient id="afroBase" cx="0.45" cy="0.4" r="0.7">
+      <stop offset="0" stop-color="#5f3a7a" />
+      <stop offset="1" stop-color="#2b163a" />
     </radialGradient>
   </defs>
-  <path d="M100 16c-40 0-76 30-80 74-3 34 16 52 36 58 4.8 1.4 9.5-2 9.5-6.9 0-6.1-4.7-10.2-4.7-16.1 0-10.2 10.2-20 20.4-20 18.1 0 18.1 12.7 18.1 18.1 0 7.2-4.6 13.2-4.6 20.5C94.7 149 101 156 111 156h10c20 0 46-16 55-42 13-38-14-98-76-98z" fill="url(#afroTexture)" />
-  <path d="M68 66c18-14 46-20 70-10" fill="none" stroke="#51372e" stroke-width="12" stroke-linecap="round" opacity="0.4" />
-  <path d="M46 98c12-24 40-36 72-30" fill="none" stroke="#51372e" stroke-width="10" stroke-linecap="round" opacity="0.3" />
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M26 128c-8-42 24-96 78-100s98 44 86 96c-6 24-22 44-46 54-26 10-46 4-60-2-22-10-48-34-58-48z" fill="url(#afroBase)" stroke="#220c2c" stroke-width="6" />
+    <path d="M46 86c8-22 28-44 58-46 30-2 56 18 70 42" fill="none" stroke="#8254a3" stroke-width="8" opacity="0.45" />
+    <path d="M42 132c18 18 38 30 58 30s40-12 58-30" fill="none" stroke="#8254a3" stroke-width="8" opacity="0.35" />
+  </g>
 </svg>

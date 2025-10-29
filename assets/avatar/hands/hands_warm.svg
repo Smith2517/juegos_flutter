@@ -1,18 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
   <defs>
-    <linearGradient id="warmHand" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#f9cfb0" />
-      <stop offset="1" stop-color="#d18a57" />
-    </linearGradient>
-    <linearGradient id="warmShadow" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#c67844" />
-      <stop offset="1" stop-color="#e3a06f" />
-    </linearGradient>
+    <radialGradient id="handsWarm" cx="100" cy="164" r="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffd8bd" />
+      <stop offset="1" stop-color="#d98a54" />
+    </radialGradient>
   </defs>
-  <path d="M32 132c0-38 16-72 40-72 14 0 24 12 24 28v72H32z" fill="url(#warmHand)" />
-  <path d="M208 132c0-38-16-72-40-72-14 0-24 12-24 28v72h64z" fill="url(#warmHand)" />
-  <path d="M40 134h56" stroke="url(#warmShadow)" stroke-width="16" stroke-linecap="round" />
-  <path d="M144 134h56" stroke="url(#warmShadow)" stroke-width="16" stroke-linecap="round" />
-  <path d="M72 76c-6 10-10 26-10 38 0 4 3 6 6 6s6-2 6-6c0-10 4-20 8-26 2.4-3.6-.4-8.4-4.7-8.4-2.4 0-4.6 1.3-5.3 3.4z" fill="#c87b4a" />
-  <path d="M168 76c6 10 10 26 10 38 0 4-3 6-6 6s-6-2-6-6c0-10-4-20-8-26-2.4-3.6.4-8.4 4.7-8.4 2.4 0 4.6 1.3 5.3 3.4z" fill="#c87b4a" />
+  <g stroke="#b06a3a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 158c2-22 22-40 48-46l6 18c-12 4-20 12-20 22 0 12 14 20 30 20s30-8 30-20c0-10-8-18-20-22l6-18c26 6 46 24 48 46 2 24-28 42-64 42s-66-18-64-42z" fill="url(#handsWarm)" />
+    <path d="M70 170c6 8 18 14 30 14s24-6 30-14" fill="none" />
+  </g>
 </svg>

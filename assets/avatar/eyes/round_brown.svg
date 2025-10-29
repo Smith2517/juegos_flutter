@@ -1,20 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
   <defs>
-    <linearGradient id="brownIris" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#b88742" />
-      <stop offset="1" stop-color="#5b3712" />
-    </linearGradient>
+    <radialGradient id="brownIris" cx="0.5" cy="0.45" r="0.65">
+      <stop offset="0" stop-color="#f2cfa2" />
+      <stop offset="0.6" stop-color="#b4783e" />
+      <stop offset="1" stop-color="#47260e" />
+    </radialGradient>
   </defs>
-  <g transform="translate(0 6)">
-    <path d="M24 60c10-28 38-44 76-44s66 16 76 44c-10 28-38 44-76 44S34 88 24 60z" fill="#fefcfe" stroke="#2c1f14" stroke-width="6" stroke-linecap="round" />
-    <g transform="translate(36)">
-      <ellipse cx="64" cy="60" rx="26" ry="28" fill="#fff" />
-      <circle cx="64" cy="60" r="18" fill="url(#brownIris)" />
-      <circle cx="64" cy="60" r="9" fill="#1b0d06" />
-      <circle cx="74" cy="52" r="6" fill="#fff" opacity="0.9" />
-      <ellipse cx="52" cy="74" rx="12" ry="6" fill="#f2d4ba" opacity="0.6" />
+  <g stroke-linecap="round" stroke-linejoin="round" transform="translate(0 4)">
+    <path d="M32 56c10-30 40-46 68-46s58 16 68 46c-10 30-40 46-68 46S42 86 32 56z" fill="#fffdfc" stroke="#2c2b40" stroke-width="6" />
+    <path d="M48 48c14-12 32-18 52-18s38 6 52 18" fill="none" stroke="#2c2b40" stroke-width="6" />
+    <g>
+      <g>
+        <ellipse cx="76" cy="56" rx="24" ry="26" fill="#ffffff" stroke="#2c2b40" stroke-width="4" />
+        <circle cx="76" cy="56" r="16" fill="url(#brownIris)" />
+        <circle cx="76" cy="56" r="8" fill="#1a1a1a" />
+        <circle cx="82" cy="50" r="5" fill="#fff" opacity="0.9" />
+      </g>
+      <g>
+        <ellipse cx="124" cy="56" rx="24" ry="26" fill="#ffffff" stroke="#2c2b40" stroke-width="4" />
+        <circle cx="124" cy="56" r="16" fill="url(#brownIris)" />
+        <circle cx="124" cy="56" r="8" fill="#1a1a1a" />
+        <circle cx="130" cy="50" r="5" fill="#fff" opacity="0.9" />
+      </g>
     </g>
-    <path d="M38 52c10-14 32-24 62-24s52 10 62 24" fill="none" stroke="#2c1f14" stroke-width="6" stroke-linecap="round" />
-    <path d="M38 88c10 10 32 18 62 18s52-8 62-18" fill="none" stroke="#d3b794" stroke-width="6" stroke-linecap="round" opacity="0.6" />
+    <path d="M50 86c12 10 30 16 50 16s38-6 50-16" fill="none" stroke="#d6b89a" stroke-width="6" opacity="0.6" />
   </g>
 </svg>
