@@ -1,17 +1,16 @@
 /// Widget de Avatar Animado
 ///
-/// Renderiza un avatar personalizado utilizando capas SVG con un estilo
+/// Renderiza un avatar personalizado utilizando capas SVG o PNG con un estilo
 /// caricaturesco. Mantiene compatibilidad con las expresiones animadas.
 ///
 /// Autor: Sistema Educativo
 /// Fecha: 2025
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../app/config/avatar_catalog.dart';
 import '../../domain/models/avatar_model.dart';
 import '../../domain/models/avatar_part_item.dart';
+import 'avatar_asset.dart';
 
 class _LayerLayout {
   final double widthFactor;
@@ -29,6 +28,7 @@ class _LayerLayout {
 
 const Map<String, _LayerLayout> _layerLayouts = {
   'face': _LayerLayout(widthFactor: 0.68, heightFactor: 0.46, topFactor: 0.18),
+  'body': _LayerLayout(widthFactor: 0.9, heightFactor: 0.68, topFactor: 0.34),
   'eyes': _LayerLayout(widthFactor: 0.36, heightFactor: 0.16, topFactor: 0.32),
   'mouth': _LayerLayout(widthFactor: 0.32, heightFactor: 0.12, topFactor: 0.46),
   'hair': _LayerLayout(widthFactor: 0.96, heightFactor: 0.48, topFactor: -0.02),
@@ -235,6 +235,7 @@ class _AvatarWidgetState extends State<AvatarWidget>
   Widget _buildAvatarStack(String expression) {
     final background = AvatarCatalog.getPartById(widget.avatar.background);
     final face = AvatarCatalog.getPartById(widget.avatar.face);
+    final body = AvatarCatalog.getPartById(widget.avatar.body);
     final eyes = AvatarCatalog.getPartById(_resolveEyesForExpression(expression));
     final mouth = AvatarCatalog.getPartById(_resolveMouthForExpression(expression));
     final hair = AvatarCatalog.getPartById(widget.avatar.hair);
@@ -273,8 +274,8 @@ class _AvatarWidgetState extends State<AvatarWidget>
           child: ClipRRect(
             borderRadius: BorderRadius.circular(24 * scale),
             child: background != null && background.assetPath.isNotEmpty
-                ? SvgPicture.asset(
-                    background.assetPath,
+                ? AvatarAsset(
+                    assetPath: background.assetPath,
                     fit: BoxFit.cover,
                   )
                 : const SizedBox.shrink(),
@@ -290,7 +291,7 @@ class _AvatarWidgetState extends State<AvatarWidget>
 
       final layout = _layerLayouts[key];
       if (layout == null) {
-        children.add(Center(child: _buildSvg(part)));
+        children.add(Center(child: _buildAsset(part)));
         return;
       }
 
@@ -306,7 +307,7 @@ class _AvatarWidgetState extends State<AvatarWidget>
           left: left,
           width: layerWidth,
           height: layerHeight,
-          child: _buildSvg(
+          child: _buildAsset(
             part,
             width: layerWidth,
             height: layerHeight,
@@ -330,6 +331,7 @@ class _AvatarWidgetState extends State<AvatarWidget>
       ),
     );
 
+    addLayer(body, 'body');
     addLayer(bottom, 'bottom');
     addLayer(shoes, 'shoes');
     addLayer(top, 'top');
@@ -350,7 +352,7 @@ class _AvatarWidgetState extends State<AvatarWidget>
     );
   }
 
-  Widget _buildSvg(
+  Widget _buildAsset(
     AvatarPartItem? part, {
     double? width,
     double? height,
@@ -359,8 +361,8 @@ class _AvatarWidgetState extends State<AvatarWidget>
       return const SizedBox.shrink();
     }
 
-    return SvgPicture.asset(
-      part.assetPath,
+    return AvatarAsset(
+      assetPath: part.assetPath,
       width: width,
       height: height,
       fit: BoxFit.contain,
@@ -421,29 +423,29 @@ class SimpleAvatarWidget extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             if (background != null && background.assetPath.isNotEmpty)
-              SvgPicture.asset(
-                background.assetPath,
+              AvatarAsset(
+                assetPath: background.assetPath,
                 fit: BoxFit.cover,
               ),
             Align(
               alignment: Alignment.topCenter,
-              child: _buildCompactSvg(hair, size * 0.7),
+              child: _buildCompactAsset(hair, size * 0.7),
             ),
             Align(
               alignment: Alignment.center,
-              child: _buildCompactSvg(face, size * 0.75),
+              child: _buildCompactAsset(face, size * 0.75),
             ),
             Align(
               alignment: Alignment.center,
-              child: _buildCompactSvg(eyes, size * 0.45),
+              child: _buildCompactAsset(eyes, size * 0.45),
             ),
             Align(
               alignment: Alignment(0, 0.4),
-              child: _buildCompactSvg(mouth, size * 0.35),
+              child: _buildCompactAsset(mouth, size * 0.35),
             ),
             Align(
               alignment: Alignment.topCenter,
-              child: _buildCompactSvg(accessory, size * 0.6),
+              child: _buildCompactAsset(accessory, size * 0.6),
             ),
           ],
         ),
@@ -451,13 +453,13 @@ class SimpleAvatarWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildCompactSvg(AvatarPartItem? part, double size) {
+  Widget _buildCompactAsset(AvatarPartItem? part, double size) {
     if (part == null || part.assetPath.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    return SvgPicture.asset(
-      part.assetPath,
+    return AvatarAsset(
+      assetPath: part.assetPath,
       width: size,
       height: size,
       fit: BoxFit.contain,

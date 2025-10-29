@@ -15,6 +15,7 @@ class AvatarModel {
 
   // Partes del avatar (identificadores de asset)
   final String face; // Cara/base de piel
+  final String body; // Cuerpo base
   final String eyes; // Ojos
   final String mouth; // Boca
   final String hair; // Cabello
@@ -30,6 +31,7 @@ class AvatarModel {
 
   // Partes desbloqueadas por el usuario
   final List<String> unlockedFaces;
+  final List<String> unlockedBodies;
   final List<String> unlockedEyes;
   final List<String> unlockedMouths;
   final List<String> unlockedHairs;
@@ -44,6 +46,7 @@ class AvatarModel {
     required this.userId,
     required this.gender,
     required this.face,
+    required this.body,
     required this.eyes,
     required this.mouth,
     required this.hair,
@@ -55,6 +58,7 @@ class AvatarModel {
     required this.background,
     this.currentExpression = 'neutral',
     this.unlockedFaces = const [],
+    this.unlockedBodies = const [],
     this.unlockedEyes = const [],
     this.unlockedMouths = const [],
     this.unlockedHairs = const [],
@@ -72,6 +76,7 @@ class AvatarModel {
       userId: userId,
       gender: 'male',
       face: 'face_skin_light',
+      body: 'body_kid_boy',
       eyes: 'eyes_round_brown',
       mouth: 'mouth_smile',
       hair: 'hair_curly_dark',
@@ -82,6 +87,7 @@ class AvatarModel {
       accessory: 'acc_none',
       background: 'bg_classroom',
       unlockedFaces: const ['face_skin_light', 'face_skin_warm'],
+      unlockedBodies: const ['body_kid_boy', 'body_kid_girl'],
       unlockedEyes: const ['eyes_round_brown'],
       unlockedMouths: const ['mouth_smile'],
       unlockedHairs: const ['hair_curly_dark'],
@@ -100,6 +106,7 @@ class AvatarModel {
       userId: userId,
       gender: 'female',
       face: 'face_skin_warm',
+      body: 'body_kid_girl',
       eyes: 'eyes_round_hazel',
       mouth: 'mouth_smile',
       hair: 'hair_long_brown',
@@ -110,6 +117,7 @@ class AvatarModel {
       accessory: 'acc_none',
       background: 'bg_classroom',
       unlockedFaces: const ['face_skin_light', 'face_skin_warm'],
+      unlockedBodies: const ['body_kid_boy', 'body_kid_girl'],
       unlockedEyes: const ['eyes_round_hazel'],
       unlockedMouths: const ['mouth_smile'],
       unlockedHairs: const ['hair_long_brown'],
@@ -128,6 +136,7 @@ class AvatarModel {
       'userId': userId,
       'gender': gender,
       'face': face,
+      'body': body,
       'eyes': eyes,
       'mouth': mouth,
       'hair': hair,
@@ -139,6 +148,7 @@ class AvatarModel {
       'background': background,
       'currentExpression': currentExpression,
       'unlockedFaces': unlockedFaces,
+      'unlockedBodies': unlockedBodies,
       'unlockedEyes': unlockedEyes,
       'unlockedMouths': unlockedMouths,
       'unlockedHairs': unlockedHairs,
@@ -153,13 +163,21 @@ class AvatarModel {
 
   /// Crea un modelo desde Map de Firebase con compatibilidad retroactiva
   factory AvatarModel.fromMap(Map<String, dynamic> map) {
+    final gender = (map['gender'] as String? ?? 'male').toLowerCase();
+    final fallbackBody = gender == 'female' ? 'body_kid_girl' : 'body_kid_boy';
+
     return AvatarModel(
       userId: map['userId'] as String? ?? '',
-      gender: map['gender'] as String? ?? 'male',
+      gender: gender,
       face: AvatarCatalog.resolvePartId(
         map['face'] as String?,
         category: 'face',
         fallbackId: 'face_skin_light',
+      ),
+      body: AvatarCatalog.resolvePartId(
+        map['body'] as String?,
+        category: 'body',
+        fallbackId: fallbackBody,
       ),
       eyes: AvatarCatalog.resolvePartId(
         map['eyes'] as String?,
@@ -208,6 +226,7 @@ class AvatarModel {
       ),
       currentExpression: map['currentExpression'] as String? ?? 'neutral',
       unlockedFaces: _mapUnlocked(map['unlockedFaces'], 'face'),
+      unlockedBodies: _mapUnlocked(map['unlockedBodies'], 'body'),
       unlockedEyes: _mapUnlocked(map['unlockedEyes'], 'eyes'),
       unlockedMouths: _mapUnlocked(map['unlockedMouths'], 'mouth'),
       unlockedHairs: _mapUnlocked(map['unlockedHairs'], 'hair'),
@@ -230,17 +249,21 @@ class AvatarModel {
 
     final entries = List<String>.from(rawList as List);
     final fallback = defaultIds.isNotEmpty ? defaultIds.first : '';
+    final resolved = <String>{...defaultIds};
 
-    return entries
-        .map(
-          (value) => AvatarCatalog.resolvePartId(
-            value,
-            category: category,
-            fallbackId: fallback,
-          ),
-        )
-        .where((value) => value.isNotEmpty)
-        .toList();
+    for (final value in entries) {
+      final normalized = AvatarCatalog.resolvePartId(
+        value,
+        category: category,
+        fallbackId: fallback,
+      );
+
+      if (normalized.isNotEmpty) {
+        resolved.add(normalized);
+      }
+    }
+
+    return resolved.toList();
   }
 
   /// Copia el avatar con cambios
@@ -248,6 +271,7 @@ class AvatarModel {
     String? userId,
     String? gender,
     String? face,
+    String? body,
     String? eyes,
     String? mouth,
     String? hair,
@@ -259,6 +283,7 @@ class AvatarModel {
     String? background,
     String? currentExpression,
     List<String>? unlockedFaces,
+    List<String>? unlockedBodies,
     List<String>? unlockedEyes,
     List<String>? unlockedMouths,
     List<String>? unlockedHairs,
@@ -273,6 +298,7 @@ class AvatarModel {
       userId: userId ?? this.userId,
       gender: gender ?? this.gender,
       face: face ?? this.face,
+      body: body ?? this.body,
       eyes: eyes ?? this.eyes,
       mouth: mouth ?? this.mouth,
       hair: hair ?? this.hair,
@@ -284,6 +310,7 @@ class AvatarModel {
       background: background ?? this.background,
       currentExpression: currentExpression ?? this.currentExpression,
       unlockedFaces: unlockedFaces ?? this.unlockedFaces,
+      unlockedBodies: unlockedBodies ?? this.unlockedBodies,
       unlockedEyes: unlockedEyes ?? this.unlockedEyes,
       unlockedMouths: unlockedMouths ?? this.unlockedMouths,
       unlockedHairs: unlockedHairs ?? this.unlockedHairs,
@@ -301,6 +328,8 @@ class AvatarModel {
     switch (category) {
       case 'face':
         return AvatarCatalog.getPartById(face);
+      case 'body':
+        return AvatarCatalog.getPartById(body);
       case 'eyes':
         return AvatarCatalog.getPartById(eyes);
       case 'mouth':

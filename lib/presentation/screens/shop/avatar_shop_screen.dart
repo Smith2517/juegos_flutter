@@ -10,7 +10,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,6 +18,7 @@ import '../../../domain/models/avatar_model.dart';
 import '../../../domain/services/avatar_service.dart';
 import '../../../app/config/avatar_catalog.dart';
 import '../../../domain/models/avatar_part_item.dart';
+import '../../widgets/avatar_asset.dart';
 
 class AvatarShopScreen extends StatefulWidget {
   const AvatarShopScreen({super.key});
@@ -546,8 +546,8 @@ class _PartThumbnail extends StatelessWidget {
       );
     }
 
-    return SvgPicture.asset(
-      part.assetPath,
+    return AvatarAsset(
+      assetPath: part.assetPath,
       width: size,
       height: size,
       fit: BoxFit.contain,

@@ -10,7 +10,6 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/config/avatar_catalog.dart';
@@ -18,6 +17,7 @@ import '../../app/theme/colors.dart';
 import '../../domain/models/avatar_model.dart';
 import '../../domain/models/avatar_part_item.dart';
 import '../../domain/services/avatar_service.dart';
+import 'avatar_asset.dart';
 import 'avatar_widget.dart';
 
 class AvatarCustomizationSheet extends StatefulWidget {
@@ -99,6 +99,8 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
     switch (category) {
       case 'face':
         return _currentAvatar.unlockedFaces;
+      case 'body':
+        return _currentAvatar.unlockedBodies;
       case 'eyes':
         return _currentAvatar.unlockedEyes;
       case 'mouth':
@@ -126,6 +128,8 @@ class _AvatarCustomizationSheetState extends State<AvatarCustomizationSheet> {
     switch (category) {
       case 'face':
         return _currentAvatar.face;
+      case 'body':
+        return _currentAvatar.body;
       case 'eyes':
         return _currentAvatar.eyes;
       case 'mouth':
@@ -374,12 +378,12 @@ class _PartPreview extends StatelessWidget {
     }
 
     return Center(
-      child: SvgPicture.asset(
-        part.assetPath,
+      child: AvatarAsset(
+        assetPath: part.assetPath,
         width: 56,
         height: 56,
         fit: BoxFit.contain,
-        placeholderBuilder: (_) => fallback,
+        placeholder: fallback,
       ),
     );
   }
