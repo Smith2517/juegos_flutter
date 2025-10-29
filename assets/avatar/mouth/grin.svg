@@ -1,22 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 120">
   <defs>
-    <linearGradient id="grinLip" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ff9c8d" />
-      <stop offset="1" stop-color="#c13347" />
+    <linearGradient id="grinLip" x1="0" x2="1" y1="0.2" y2="0.8">
+      <stop offset="0%" stop-color="#f37c90" />
+      <stop offset="50%" stop-color="#d8495f" />
+      <stop offset="100%" stop-color="#af243f" />
     </linearGradient>
-    <linearGradient id="grinTeeth" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#fff" />
-      <stop offset="1" stop-color="#f1f1f1" />
-    </linearGradient>
-    <linearGradient id="grinTongue" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ff7f9f" />
-      <stop offset="1" stop-color="#d0486f" />
+    <radialGradient id="grinShadow" cx="0.5" cy="0.65" r="0.6">
+      <stop offset="0%" stop-color="#300915" />
+      <stop offset="100%" stop-color="#0c0206" />
+    </radialGradient>
+    <linearGradient id="grinTeeth" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#edf4ff" />
     </linearGradient>
   </defs>
-  <g stroke-linecap="round" stroke-linejoin="round">
-    <path d="M40 72c18 32 42 48 60 48s42-16 60-48" fill="none" stroke="#2c2b40" stroke-width="8" />
-    <path d="M52 82c16 22 32 34 48 34s32-12 48-34c5-6.6 13.2-7.4 18-2 3.8 4 3.4 11-1 15.6C146 148 122 166 100 166s-46-18-65-70.4c-4.4-4.6-4.8-11.6-1-15.6 4.8-5.4 13-4.6 18 2z" fill="url(#grinLip)" stroke="#2c2b40" stroke-width="4" />
-    <path d="M64 94c12 18 24 26 36 26s24-8 36-26c-10 6-24 10-36 10s-26-4-36-10z" fill="url(#grinTeeth)" />
-    <path d="M70 110c10 8 20 12 30 12s20-4 30-12c-8 14-18 22-30 22s-22-8-30-22z" fill="url(#grinTongue)" />
+  <g fill="none" fill-rule="evenodd">
+    <path
+      d="M30 46c14 44 46 72 90 72s76-28 90-72"
+      stroke="#3a0c1b"
+      stroke-width="12"
+      stroke-linecap="round"
+      opacity="0.6"
+    />
+    <path
+      d="M46 38c14 42 44 64 74 64s60-22 74-64c-18-14-52-24-74-24s-56 10-74 24z"
+      fill="url(#grinLip)"
+      stroke="#4d0f24"
+      stroke-width="6"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M60 58c14 20 40 32 60 32s46-12 60-32c-20-8-40-12-60-12s-40 4-60 12z"
+      fill="url(#grinTeeth)"
+    />
+    <path
+      d="M70 78c14 12 30 18 50 18s36-6 50-18"
+      stroke="#e7f2ff"
+      stroke-width="6"
+      stroke-linecap="round"
+      opacity="0.9"
+    />
+    <path
+      d="M58 58c14 26 40 42 62 42s48-16 62-42c-20-8-40-12-62-12s-42 4-62 12z"
+      fill="url(#grinShadow)"
+      opacity="0.35"
+    />
+    <path
+      d="M58 56c14 10 38 16 62 16s48-6 62-16"
+      stroke="#821f3a"
+      stroke-width="6"
+      stroke-linecap="round"
+      opacity="0.65"
+    />
   </g>
 </svg>

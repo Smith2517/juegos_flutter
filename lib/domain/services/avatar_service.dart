@@ -86,6 +86,9 @@ class AvatarService {
         case 'face':
           updateData['face'] = partId;
           break;
+        case 'body':
+          updateData['body'] = partId;
+          break;
         case 'eyes':
           updateData['eyes'] = partId;
           break;
@@ -162,7 +165,7 @@ class AvatarService {
         );
 
         // Agregar parte a la lista de desbloqueados
-        final fieldName = 'unlocked${_capitalize(part.category)}s';
+        final fieldName = _unlockedFieldName(part.category);
         transaction.update(
           _firestore.collection('avatars').doc(userId),
           {
@@ -190,6 +193,8 @@ class AvatarService {
     switch (category) {
       case 'face':
         return avatar.unlockedFaces;
+      case 'body':
+        return avatar.unlockedBodies;
       case 'eyes':
         return avatar.unlockedEyes;
       case 'mouth':
@@ -210,6 +215,35 @@ class AvatarService {
         return avatar.unlockedBackgrounds;
       default:
         return [];
+    }
+  }
+
+  String _unlockedFieldName(String category) {
+    switch (category) {
+      case 'face':
+        return 'unlockedFaces';
+      case 'body':
+        return 'unlockedBodies';
+      case 'eyes':
+        return 'unlockedEyes';
+      case 'mouth':
+        return 'unlockedMouths';
+      case 'hair':
+        return 'unlockedHairs';
+      case 'top':
+        return 'unlockedTops';
+      case 'bottom':
+        return 'unlockedBottoms';
+      case 'shoes':
+        return 'unlockedShoes';
+      case 'hands':
+        return 'unlockedHands';
+      case 'accessory':
+        return 'unlockedAccessories';
+      case 'background':
+        return 'unlockedBackgrounds';
+      default:
+        return 'unlocked${_capitalize(category)}s';
     }
   }
 

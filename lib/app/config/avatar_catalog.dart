@@ -3,7 +3,7 @@ library;
 /// Catálogo de Partes de Avatar
 ///
 /// Define todas las piezas disponibles para personalizar el avatar. Cada
-/// elemento apunta a un asset SVG que se renderiza en capas dentro del
+/// elemento apunta a un asset SVG o PNG que se renderiza en capas dentro del
 /// widget de avatar.
 
 import 'dart:convert';
@@ -44,6 +44,30 @@ class AvatarCatalog {
       emoji: '😌',
       name: 'Piel oscura',
       description: 'Tono de piel oscuro',
+      price: 0,
+      isDefault: true,
+    ),
+  ];
+
+  // CUERPOS BASE
+  static final List<AvatarPartItem> bodies = [
+    const AvatarPartItem(
+      id: 'body_kid_boy',
+      category: 'body',
+      assetPath: 'assets/avatar/body/body_kid_boy.svg',
+      emoji: '🧍‍♂️',
+      name: 'Cuerpo niño',
+      description: 'Base anatómica estilizada para niño',
+      price: 0,
+      isDefault: true,
+    ),
+    const AvatarPartItem(
+      id: 'body_kid_girl',
+      category: 'body',
+      assetPath: 'assets/avatar/body/body_kid_girl.svg',
+      emoji: '🧍‍♀️',
+      name: 'Cuerpo niña',
+      description: 'Base anatómica estilizada para niña',
       price: 0,
       isDefault: true,
     ),
@@ -400,6 +424,7 @@ class AvatarCatalog {
 
   static final Map<String, List<AvatarPartItem>> _partsByCategory = {
     'face': faces,
+    'body': bodies,
     'eyes': eyes,
     'mouth': mouths,
     'hair': hairs,
@@ -525,6 +550,8 @@ class AvatarCatalog {
     switch (category) {
       case 'face':
         return '😊';
+      case 'body':
+        return '🧍';
       case 'eyes':
         return '👀';
       case 'mouth':
@@ -553,6 +580,8 @@ class AvatarCatalog {
     switch (category) {
       case 'face':
         return faces;
+      case 'body':
+        return bodies;
       case 'eyes':
         return eyes;
       case 'mouth':
@@ -651,6 +680,7 @@ class AvatarCatalog {
   /// Obtiene todas las categorías disponibles
   static List<String> get categories => [
         'face',
+        'body',
         'eyes',
         'mouth',
         'hair',
@@ -667,6 +697,8 @@ class AvatarCatalog {
     switch (category) {
       case 'face':
         return 'Piel';
+      case 'body':
+        return 'Cuerpo';
       case 'eyes':
         return 'Ojos';
       case 'mouth':
@@ -695,6 +727,8 @@ class AvatarCatalog {
     switch (category) {
       case 'face':
         return '😊';
+      case 'body':
+        return '🧍';
       case 'eyes':
         return '👀';
       case 'mouth':
@@ -720,6 +754,7 @@ class AvatarCatalog {
 
   static List<AvatarPartItem> get _allParts => [
         ...faces,
+        ...bodies,
         ...eyes,
         ...mouths,
         ...hairs,

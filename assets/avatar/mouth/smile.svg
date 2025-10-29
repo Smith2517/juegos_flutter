@@ -1,17 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 120">
   <defs>
-    <linearGradient id="lipBase" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ff9ca8" />
-      <stop offset="1" stop-color="#d23b63" />
+    <linearGradient id="lipColor" x1="0" x2="1" y1="0.2" y2="0.8">
+      <stop offset="0%" stop-color="#ec6b8a" />
+      <stop offset="45%" stop-color="#d44568" />
+      <stop offset="100%" stop-color="#b12e54" />
     </linearGradient>
-    <linearGradient id="innerSmile" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffeef2" />
-      <stop offset="1" stop-color="#f7c6d3" />
+    <radialGradient id="innerMouth" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0%" stop-color="#872642" />
+      <stop offset="100%" stop-color="#4f0f22" />
+    </radialGradient>
+    <linearGradient id="teeth" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f3f7ff" />
     </linearGradient>
   </defs>
-  <g stroke-linecap="round" stroke-linejoin="round">
-    <path d="M44 70c16 26 40 40 56 40s40-14 56-40" fill="none" stroke="#2c2b40" stroke-width="8" />
-    <path d="M52 78c14 20 32 32 48 32s34-12 48-32c4.4-6.2 12.2-6.8 16.6-2 3.6 3.8 3.8 10.4-.2 14.6C146 146 122 162 100 162S54 146 35.6 90.6c-4-4.2-3.8-10.8-.2-14.6 4.4-4.8 12.2-4.2 16.6 2z" fill="url(#lipBase)" stroke="#2c2b40" stroke-width="4" />
-    <path d="M64 96c12 12 24 18 36 18s24-6 36-18c-10 6-24 10-36 10s-26-4-36-10z" fill="url(#innerSmile)" />
+  <g fill="none" fill-rule="evenodd">
+    <path
+      d="M38 52c12 34 46 56 82 56s70-22 82-56"
+      stroke="#3d101f"
+      stroke-width="10"
+      stroke-linecap="round"
+      opacity="0.65"
+    />
+    <path
+      d="M52 44c12 32 38 48 68 48s56-16 68-48c-12-10-40-18-68-18s-56 8-68 18z"
+      fill="url(#lipColor)"
+      stroke="#520f24"
+      stroke-width="6"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M62 56c12 18 34 30 58 30s46-12 58-30c-16-4-38-8-58-8s-42 4-58 8z"
+      fill="url(#innerMouth)"
+    />
+    <path
+      d="M64 56c12 10 30 16 56 16s44-6 56-16c-16-4-36-6-56-6s-40 2-56 6z"
+      fill="url(#teeth)"
+      opacity="0.92"
+    />
+    <path
+      d="M68 74c12 8 28 12 52 12s40-4 52-12"
+      stroke="#fddde8"
+      stroke-width="4"
+      stroke-linecap="round"
+      opacity="0.6"
+    />
   </g>
 </svg>
