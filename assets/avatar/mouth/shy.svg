@@ -1,5 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
-  <path d="M50 60 Q100 40 150 60" fill="none" stroke="#9e2f2f" stroke-width="8" stroke-linecap="round" />
-  <circle cx="70" cy="70" r="10" fill="#f4a3ae" opacity="0.6" />
-  <circle cx="130" cy="70" r="10" fill="#f4a3ae" opacity="0.6" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+  <defs>
+    <linearGradient id="shyLip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffb3c2" />
+      <stop offset="1" stop-color="#d44a73" />
+    </linearGradient>
+  </defs>
+  <path d="M52 88c12-16 30-24 48-24s36 8 48 24" fill="none" stroke="#391421" stroke-width="10" stroke-linecap="round" />
+  <path d="M64 90c10-10 22-16 36-16s26 6 36 16c3.3 3.4 3.3 8.8 0 12.2-10 10.4-22 16.8-36 16.8s-26-6.4-36-16.8c-3.3-3.4-3.3-8.8 0-12.2z" fill="url(#shyLip)" />
+  <path d="M72 96c8-6 16-10 28-10s20 4 28 10c-8 6-16 10-28 10s-20-4-28-10z" fill="#fff" opacity="0.7" />
 </svg>

@@ -1,9 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
   <defs>
     <radialGradient id="lightSkin" cx="100" cy="90" r="90" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#fbe2ce" />
-      <stop offset="1" stop-color="#f2c7a6" />
+      <stop offset="0" stop-color="#ffeada" />
+      <stop offset="1" stop-color="#f2c3a0" />
     </radialGradient>
+    <linearGradient id="lightShadow" x1="100" y1="140" x2="100" y2="190" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e9b796" stop-opacity="0.7" />
+      <stop offset="1" stop-color="#c78763" stop-opacity="0" />
+    </linearGradient>
   </defs>
-  <circle cx="100" cy="100" r="90" fill="url(#lightSkin)" />
+  <path d="M100 32c-34 0-62 28.2-62 63v22c0 39.4 28.4 71 62 71s62-31.6 62-71v-22c0-34.8-28-63-62-63z" fill="url(#lightSkin)" />
+  <path d="M52 112c0-14.5 9.3-26.2 21.5-26.2V146C61.3 146 52 134.5 52 122v-10z" fill="#f2c3a0" opacity="0.8" />
+  <path d="M148 112c0-14.5-9.3-26.2-21.5-26.2V146c12.2 0 21.5-11.5 21.5-24v-10z" fill="#f2c3a0" opacity="0.8" />
+  <path d="M100 164c-16.5 0-28-10.5-28-10.5 6.7 16.5 18.8 26.5 28 26.5s21.3-10 28-26.5c0 0-11.5 10.5-28 10.5z" fill="url(#lightShadow)" />
+  <ellipse cx="72" cy="122" rx="12" ry="8" fill="#f8bfa0" opacity="0.65" />
+  <ellipse cx="128" cy="122" rx="12" ry="8" fill="#f8bfa0" opacity="0.65" />
+  <path d="M100 116c-4.2 0-7.8-2.8-8.8-6.8-.3-1.3.5-2.6 1.8-2.9 1.3-.3 2.6.5 2.9 1.8.4 1.6 2 2.9 4.1 2.9s3.7-1.3 4.1-2.9c.3-1.3 1.6-2.2 2.9-1.8 1.3.3 2.2 1.6 1.8 2.9-.9 4-4.6 6.8-8.8 6.8z" fill="#eaa583" />
 </svg>
