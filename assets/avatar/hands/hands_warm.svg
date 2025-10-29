@@ -1,6 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
-  <path d="M40 80 Q50 40 70 40 Q80 40 80 60 V120 H40 Z" fill="#e0a677" />
-  <path d="M200 80 Q190 40 170 40 Q160 40 160 60 V120 H200 Z" fill="#e0a677" />
-  <rect x="40" y="110" width="40" height="10" rx="6" fill="#c78959" />
-  <rect x="160" y="110" width="40" height="10" rx="6" fill="#c78959" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="handsWarm" cx="100" cy="164" r="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffd8bd" />
+      <stop offset="1" stop-color="#d98a54" />
+    </radialGradient>
+  </defs>
+  <g stroke="#b06a3a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 158c2-22 22-40 48-46l6 18c-12 4-20 12-20 22 0 12 14 20 30 20s30-8 30-20c0-10-8-18-20-22l6-18c26 6 46 24 48 46 2 24-28 42-64 42s-66-18-64-42z" fill="url(#handsWarm)" />
+    <path d="M70 170c6 8 18 14 30 14s24-6 30-14" fill="none" />
+  </g>
 </svg>

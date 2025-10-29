@@ -1,6 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 160">
-  <circle cx="70" cy="70" r="50" fill="#2a1b18" />
-  <circle cx="110" cy="50" r="60" fill="#2a1b18" />
-  <circle cx="150" cy="70" r="50" fill="#2a1b18" />
-  <rect x="60" y="80" width="100" height="60" rx="30" fill="#2a1b18" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="afroBase" cx="0.45" cy="0.4" r="0.7">
+      <stop offset="0" stop-color="#5f3a7a" />
+      <stop offset="1" stop-color="#2b163a" />
+    </radialGradient>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M26 128c-8-42 24-96 78-100s98 44 86 96c-6 24-22 44-46 54-26 10-46 4-60-2-22-10-48-34-58-48z" fill="url(#afroBase)" stroke="#220c2c" stroke-width="6" />
+    <path d="M46 86c8-22 28-44 58-46 30-2 56 18 70 42" fill="none" stroke="#8254a3" stroke-width="8" opacity="0.45" />
+    <path d="M42 132c18 18 38 30 58 30s40-12 58-30" fill="none" stroke="#8254a3" stroke-width="8" opacity="0.35" />
+  </g>
 </svg>

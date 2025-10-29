@@ -1,4 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 140">
-  <path d="M20 100 Q40 10 110 30 Q180 10 200 100 L180 110 Q170 60 110 70 Q50 60 40 110 Z" fill="#2f1b17" />
-  <path d="M40 90 Q70 40 110 55 Q150 40 180 90" fill="none" stroke="#452721" stroke-width="10" stroke-linecap="round" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="curlyBase" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5f381f" />
+      <stop offset="1" stop-color="#2b1709" />
+    </linearGradient>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 120c-6-42 26-84 70-92s86 20 92 70c3 26-8 48-24 64-10-10-22-18-34-18-10 0-20 6-28 16-8-10-18-16-28-16-12 0-24 6-34 18-12-12-22-26-24-42z" fill="url(#curlyBase)" stroke="#2b1709" stroke-width="6" />
+    <path d="M46 80c10-18 30-36 54-38 24-2 46 12 56 30" fill="none" stroke="#885232" stroke-width="8" opacity="0.5" />
+    <path d="M44 132c12 12 28 20 44 20s32-8 44-20" fill="none" stroke="#885232" stroke-width="7" opacity="0.4" />
+  </g>
 </svg>

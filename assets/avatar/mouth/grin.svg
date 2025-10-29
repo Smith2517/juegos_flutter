@@ -1,5 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
-  <path d="M40 50 Q100 140 160 50" fill="#f45b69" stroke="#9e2f2f" stroke-width="8" stroke-linecap="round" />
-  <path d="M55 62 H145" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
-  <path d="M70 82 H130" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
+  <defs>
+    <linearGradient id="grinLip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff9c8d" />
+      <stop offset="1" stop-color="#c13347" />
+    </linearGradient>
+    <linearGradient id="grinTeeth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" />
+      <stop offset="1" stop-color="#f1f1f1" />
+    </linearGradient>
+    <linearGradient id="grinTongue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff7f9f" />
+      <stop offset="1" stop-color="#d0486f" />
+    </linearGradient>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 72c18 32 42 48 60 48s42-16 60-48" fill="none" stroke="#2c2b40" stroke-width="8" />
+    <path d="M52 82c16 22 32 34 48 34s32-12 48-34c5-6.6 13.2-7.4 18-2 3.8 4 3.4 11-1 15.6C146 148 122 166 100 166s-46-18-65-70.4c-4.4-4.6-4.8-11.6-1-15.6 4.8-5.4 13-4.6 18 2z" fill="url(#grinLip)" stroke="#2c2b40" stroke-width="4" />
+    <path d="M64 94c12 18 24 26 36 26s24-8 36-26c-10 6-24 10-36 10s-26-4-36-10z" fill="url(#grinTeeth)" />
+    <path d="M70 110c10 8 20 12 30 12s20-4 30-12c-8 14-18 22-30 22s-22-8-30-22z" fill="url(#grinTongue)" />
+  </g>
 </svg>

@@ -1,9 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
   <defs>
-    <radialGradient id="warmSkin" cx="100" cy="90" r="90" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#f3c59d" />
-      <stop offset="1" stop-color="#d9996c" />
+    <radialGradient id="warmTone" cx="100" cy="90" r="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffd7bd" />
+      <stop offset="1" stop-color="#e09a6a" />
     </radialGradient>
+    <linearGradient id="warmHighlight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe8d6" stop-opacity="0.8" />
+      <stop offset="1" stop-color="#f2b68f" stop-opacity="0" />
+    </linearGradient>
   </defs>
-  <circle cx="100" cy="100" r="90" fill="url(#warmSkin)" />
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="34" cy="104" rx="14" ry="22" fill="#f1a876" stroke="#bf7548" stroke-width="4" />
+    <ellipse cx="166" cy="104" rx="14" ry="22" fill="#f1a876" stroke="#bf7548" stroke-width="4" />
+    <circle cx="100" cy="96" r="70" fill="url(#warmTone)" stroke="#bf7548" stroke-width="6" />
+    <path d="M60 134c20 16 40 20 40 20s20-4 40-20" fill="url(#warmHighlight)" />
+    <path d="M94 94c6 10 6 18 0 24" fill="none" stroke="#bf7548" stroke-width="4" />
+    <path d="M106 94c-2 6-2 14 2 20" fill="none" stroke="#bf7548" stroke-width="4" />
+    <circle cx="70" cy="124" r="12" fill="#ee9476" opacity="0.75" />
+    <circle cx="130" cy="124" r="12" fill="#ee9476" opacity="0.75" />
+  </g>
 </svg>

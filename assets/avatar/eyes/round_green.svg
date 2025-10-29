@@ -1,8 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
-  <ellipse cx="60" cy="60" rx="36" ry="28" fill="#ffffff" stroke="#1f5132" stroke-width="6" />
-  <circle cx="60" cy="60" r="14" fill="#2fa067" />
-  <circle cx="60" cy="60" r="7" fill="#fff" />
-  <ellipse cx="140" cy="60" rx="36" ry="28" fill="#ffffff" stroke="#1f5132" stroke-width="6" />
-  <circle cx="140" cy="60" r="14" fill="#2fa067" />
-  <circle cx="140" cy="60" r="7" fill="#fff" />
+  <defs>
+    <radialGradient id="greenIris" cx="0.5" cy="0.45" r="0.65">
+      <stop offset="0" stop-color="#c6f6bf" />
+      <stop offset="0.6" stop-color="#63b96f" />
+      <stop offset="1" stop-color="#1c4a2d" />
+    </radialGradient>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round" transform="translate(0 4)">
+    <path d="M32 56c10-30 40-46 68-46s58 16 68 46c-10 30-40 46-68 46S42 86 32 56z" fill="#fffdfc" stroke="#2c2b40" stroke-width="6" />
+    <path d="M48 48c14-12 32-18 52-18s38 6 52 18" fill="none" stroke="#2c2b40" stroke-width="6" />
+    <g>
+      <g>
+        <ellipse cx="76" cy="56" rx="24" ry="26" fill="#ffffff" stroke="#2c2b40" stroke-width="4" />
+        <circle cx="76" cy="56" r="16" fill="url(#greenIris)" />
+        <circle cx="76" cy="56" r="8" fill="#14221a" />
+        <circle cx="82" cy="50" r="5" fill="#fff" opacity="0.9" />
+      </g>
+      <g>
+        <ellipse cx="124" cy="56" rx="24" ry="26" fill="#ffffff" stroke="#2c2b40" stroke-width="4" />
+        <circle cx="124" cy="56" r="16" fill="url(#greenIris)" />
+        <circle cx="124" cy="56" r="8" fill="#14221a" />
+        <circle cx="130" cy="50" r="5" fill="#fff" opacity="0.9" />
+      </g>
+    </g>
+    <path d="M50 86c12 10 30 16 50 16s38-6 50-16" fill="none" stroke="#a1d7a4" stroke-width="6" opacity="0.6" />
+  </g>
 </svg>

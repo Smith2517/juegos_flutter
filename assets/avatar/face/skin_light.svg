@@ -1,9 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
   <defs>
-    <radialGradient id="lightSkin" cx="100" cy="90" r="90" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#fbe2ce" />
-      <stop offset="1" stop-color="#f2c7a6" />
+    <radialGradient id="lightTone" cx="100" cy="90" r="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffeadd" />
+      <stop offset="1" stop-color="#f2b48f" />
     </radialGradient>
+    <linearGradient id="lightHighlight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff2eb" stop-opacity="0.85" />
+      <stop offset="1" stop-color="#f9c4a8" stop-opacity="0" />
+    </linearGradient>
   </defs>
-  <circle cx="100" cy="100" r="90" fill="url(#lightSkin)" />
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="34" cy="104" rx="14" ry="22" fill="#f8c4a3" stroke="#d18b65" stroke-width="4" />
+    <ellipse cx="166" cy="104" rx="14" ry="22" fill="#f8c4a3" stroke="#d18b65" stroke-width="4" />
+    <circle cx="100" cy="96" r="70" fill="url(#lightTone)" stroke="#d18b65" stroke-width="6" />
+    <path d="M60 134c20 16 40 20 40 20s20-4 40-20" fill="url(#lightHighlight)" />
+    <path d="M94 94c6 10 6 18 0 24" fill="none" stroke="#d18b65" stroke-width="4" />
+    <path d="M106 94c-2 6-2 14 2 20" fill="none" stroke="#d18b65" stroke-width="4" />
+    <circle cx="70" cy="124" r="12" fill="#f6b3a2" opacity="0.8" />
+    <circle cx="130" cy="124" r="12" fill="#f6b3a2" opacity="0.8" />
+  </g>
 </svg>
