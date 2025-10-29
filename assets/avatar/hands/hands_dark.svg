@@ -1,6 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
-  <path d="M40 80 Q50 40 70 40 Q80 40 80 60 V120 H40 Z" fill="#b0744c" />
-  <path d="M200 80 Q190 40 170 40 Q160 40 160 60 V120 H200 Z" fill="#b0744c" />
-  <rect x="40" y="110" width="40" height="10" rx="6" fill="#8c5c36" />
-  <rect x="160" y="110" width="40" height="10" rx="6" fill="#8c5c36" />
+  <defs>
+    <linearGradient id="darkHand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d29c6c" />
+      <stop offset="1" stop-color="#6f3a1c" />
+    </linearGradient>
+    <linearGradient id="darkShadow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5b2a15" />
+      <stop offset="1" stop-color="#9c5c2d" />
+    </linearGradient>
+  </defs>
+  <path d="M32 132c0-38 16-72 40-72 14 0 24 12 24 28v72H32z" fill="url(#darkHand)" />
+  <path d="M208 132c0-38-16-72-40-72-14 0-24 12-24 28v72h64z" fill="url(#darkHand)" />
+  <path d="M40 134h56" stroke="url(#darkShadow)" stroke-width="16" stroke-linecap="round" />
+  <path d="M144 134h56" stroke="url(#darkShadow)" stroke-width="16" stroke-linecap="round" />
+  <path d="M72 76c-6 10-10 26-10 38 0 4 3 6 6 6s6-2 6-6c0-10 4-20 8-26 2.4-3.6-.4-8.4-4.7-8.4-2.4 0-4.6 1.3-5.3 3.4z" fill="#8a4c27" />
+  <path d="M168 76c6 10 10 26 10 38 0 4-3 6-6 6s-6-2-6-6c0-10-4-20-8-26-2.4-3.6.4-8.4 4.7-8.4 2.4 0 4.6 1.3 5.3 3.4z" fill="#8a4c27" />
 </svg>

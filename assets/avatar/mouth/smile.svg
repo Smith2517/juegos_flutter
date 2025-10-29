@@ -1,4 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
-  <path d="M40 40 Q100 110 160 40" fill="none" stroke="#9e2f2f" stroke-width="10" stroke-linecap="round" />
-  <path d="M55 46 Q100 90 145 46" fill="#f45b69" stroke="none" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">
+  <defs>
+    <linearGradient id="lipShade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff9bab" />
+      <stop offset="1" stop-color="#cc2959" />
+    </linearGradient>
+    <linearGradient id="smileInner" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd7df" />
+      <stop offset="1" stop-color="#f8f0f4" />
+    </linearGradient>
+  </defs>
+  <path d="M44 54c16 28 40 44 56 44s40-16 56-44" fill="none" stroke="#2d0b16" stroke-width="10" stroke-linecap="round" />
+  <path d="M50 66c12 20 30 32 50 32s38-12 50-32c3-5.2 10.8-6.2 15.2-2 4 3.7 4.6 9.9 1.4 14.3C150.4 121 126.1 138 100 138 73.9 138 49.6 121 33.4 78.3c-3.2-4.4-2.6-10.6 1.4-14.3 4.4-4.2 12.2-3.2 15.2 2z" fill="url(#lipShade)" />
+  <path d="M60 78c10 14 24 22 40 22s30-8 40-22c-12 10-26 16-40 16s-28-6-40-16z" fill="url(#smileInner)" />
 </svg>
